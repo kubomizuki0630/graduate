@@ -78,3 +78,5 @@ gem 'dotenv-rails'
 gem 'image_processing', '~> 1.2'
 gem 'sassc'
 gem 'kaminari'
+gem 'webpacker',    '~> 5.0'
+gem "dockerfile-rails", ">= 1.6", :group => :development

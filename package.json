@@ -1,0 +1,17 @@
+{
+  "name": "kuvo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/kubomizuki0630/graduate.git",
+  "author": "kubomizuki0630 <kubochiro@icloud.com>",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object":"^7.21.0",
+    "@rails/webpacker": "5.4.4",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^3.3.12"
+  },
+  "devDependencies": {
+    "webpack-dev-server": "^3"
+  }
+}
