@@ -10,7 +10,7 @@
       <% end %>
     <% end %>
   </h3>
-  <% if @post.images.exist? && @post.images[0] %>
+  <% if @post.images.exists? && @post.images[0] %>
     <% @post.images.each do |image| %>
       <%= image_tag image , class: "show-image" %>
     <% end %>
