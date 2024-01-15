@@ -1,0 +1,29 @@
+// Place all the styles related to the likes controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: https://sass-lang.com/
+.pagination {
+  justify-content: center;
+}
+.pagination>li>a {          
+  border: none;     
+  color: #696969; 
+  margin: 0px 8px;  
+}
+
+.pagination>.active>a {     
+  background: #1A8754;
+  border-radius: 0.25rem;      
+}
+
+.page-item:first-child .page-link {
+   border-radius: 0.25rem; 
+}
+
+a.page-link{
+  background: #ffffff;
+}
+a.page-link:hover{
+  background: #1A8754;
+  color: #ffffff;
+  border-radius: 0.25rem; 
+}
