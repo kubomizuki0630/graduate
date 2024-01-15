@@ -6,7 +6,7 @@
     <div class="card mb-5" style="width: 18rem;">
       <%= link_to(post_path(t.id),class:'text-decoration-none text-success') do %>
         <div class="card-header card-title"><%= t.title %></div>
-        <% if t.images[0] %>
+        <% if t.images.exist? && t.images[0]  %>
             <%= image_tag t.images[0], class: "card-img-top" %>
         <% else %>
           <%= image_tag "noimage.png",class: "card-img-top"  %>
