@@ -1,8 +1,8 @@
 databases:
-  - name: e-design-sharedb
-    databaseName: e_design_sharedb
+  - name: edgd
+    databaseName: edgd
     user: e-design-share
-    region: Oregon
+    region: singapore
 
 services:
   - type: web
@@ -15,7 +15,7 @@ services:
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: e-design-sharedb
+          name: edgd
           property: connectionString
       - key: RAILS_MASTER_KEY
         sync: false
