@@ -1,7 +1,7 @@
 databases:
-  - name: e-design-share
-    databaseName: e-design-sharedb
-    user: kuvo
+  - name: e-design-sharedb
+    databaseName: e_design_sharedb
+    user: e-design-share
     region: singapore
 
 services:
