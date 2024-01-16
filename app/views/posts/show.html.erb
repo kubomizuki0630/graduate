@@ -1,6 +1,5 @@
-<h3>投稿詳細</h3>
 <div class="container_pt">
-  <h3>
+  <h3 class="title_mb">
     <%= @post.title %>
     <% if user_signed_in? %>
       <% if current_user.id == @post.user_id %>
@@ -16,12 +15,18 @@
     <% end %>
   <% end %>
 </div>
+<br><br><br>
+<% unless (@post.youtube_url==nil) || (@post.youtube_url=="") %>
+<iframe class="embedded_link"  src="https://www.youtube.com/embed/<%= @post.youtube_url %>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<% end %>
 
-  <div class="show-body">
-  <h3 class="fz-20">content</h3>
-    <p><%= text_url_to_link(safe_join((h(@post.content)).split("\n"),tag(:br))).html_safe %></p>
-  </div>
-
+<% if @post.skechfab? %>
+<iframe class="embedded_link" frameborder="0" allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking execution-while-out-of-viewport execution-while-not-rendered web-share src="https://sketchfab.com/models/<%= @post.skechfab %>/embed"> </iframe> 
+<% end %>
+<div class="show-body">
+<h3 class="fz-20">content</h3>
+  <p><%= text_url_to_link(safe_join((h(@post.content)).split("\n"),tag(:br))).html_safe %></p>
+</div>
   <% if (@now - @post.created_at) <= 60 * 60 %>
     <small class="text-muted"><%=((@now - @post.created_at) / 60).to_i.to_s + "分前" %></small>
   <% elsif (@now - @post.created_at) <= 60 * 60 * 24 %>
@@ -35,54 +40,37 @@
 
   <br><br><br>
   <h1>ここから下は作業場所</h1>
-  <% unless (@post.youtube_url==nil) || (@post.youtube_url=="") %>
-   <iframe width="560" height="315" src="https://www.youtube.com/embed/<%= @post.youtube_url %>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-  <% end %>
-
-  <% if @post.skechfab? %>
-   <iframe width="560" height="315" frameborder="0" allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking execution-while-out-of-viewport execution-while-not-rendered web-share src="https://sketchfab.com/models/<%= @post.skechfab %>/embed"> </iframe> 
-  <% end %>
   <% if user_signed_in? %>
   <% if current_user.already_liked?(@post) %>
     <%= button_to post_like_path(@post), method: :delete do %>
-      <p>得点候補解除</p>
+      得点候補解除
     <% end %>
-    <%= @post.likes.count %>
+    <%#= @post.likes.count %>
   <% else %>
     <%= button_to post_likes_path(@post), method: :post do %>
-      <p>得点候補</p>
+      得点候補
     <% end %>
-    <%= @post.likes.count %>
+    <%#= @post.likes.count %>
   <% end %>
 <% else %>
-  <p>いいねの数 = </p><%= @post.likes.count %>
+  <%#= @post.likes.count %>
 <% end %>
 
-
-<h3>いいねした人</h3>
-<% @post.liked_users.each do |user| %>
-  <%= user.email %><br>
-<% end %>
 <br>
 <div class="comment-wrapper">
-  <h3>コメント一覧</h3>
+  <h3>comments</h3>
   <% @comments.each do |c| %>
     <div>
-      <%= c.user.email unless c.user.blank? %>
-      <br>
-      <%= c.content %>
+      <% if c.point?%>
+        <%= c.user.email unless c.user.blank? %>：<%= c.point %>点
+        <br>
+        <%= c.content %>
+      <% else %>
+        <%= c.user.email unless c.user.blank? %>：
+        <br>
+        <%= c.content %>
+      <% end %>
     </div>
-      <br>
-  <% end %>
-
-  <h3>点数一覧</h3>
-  <% @comments.each do |c| %>
-    <% if c.point?%>
-      <%= c.user.email unless c.user.blank? %>
-      <br>
-      <%= c.point %>点
-      <br>
-    <% end %>
   <% end %>
 
   <% if user_signed_in? %>

@@ -46,6 +46,7 @@ class PostsController < ApplicationController
     @post = Post.find(params[:id])
     @comments = @post.comments
     @comment = Comment.new
+    # render layout:'no_container' 
   end
 
   def edit

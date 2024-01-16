@@ -100,6 +100,24 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light{
   margin-right: 5px;
 }
 
+.flex-box{
+  display:flex;
+  flex-direction:row;
+  // flex-wrap:nowrap;
+  justify-content:flex-start;
+  align-items:stretch;
+  align-content:stretch;
+ 
+  /*表示用*/
+  background-color:#ccc;
+  width:100%;
+  min-height:300px;
+}
+
+.title_mb{
+  padding: 10px;
+}
+
 .show-body{
   padding-top: 20px;
   height: 30vh;
@@ -122,4 +140,9 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light{
   background-color: #f8f9fa;
 }
 
-
+.embedded_link{
+  aspect-ratio: 16 / 9;
+  width: 80%;
+  height: 80%;
+  border: none;
+}
