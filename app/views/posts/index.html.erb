@@ -20,10 +20,6 @@
               <% if current_user.id == t.user_id %>
                 <%= link_to "edit", edit_post_path(t.id) ,class: "btn btn-sm btn-outline-secondary" %>
                 <%= button_to "delete", post_path(t.id), method: :delete ,data: {confirm: "Do you want to delete it?"},class: "btn btn-sm btn-outline-secondary" %>
-              <% elsif current_user.admin? %>
-                <%= link_to "edit", edit_post_path(t.id),class: "btn btn-sm btn-outline-secondary" %>
-                <%= button_to "delete", post_path(t.id), method: :delete ,data: {confirm: "Do you want to delete it?"},class: "btn btn-sm btn-outline-secondary" %>
-              <% end %>
             <% end %>
           </div>
           <% if (@now - t.created_at) <= 60 * 60 %>
