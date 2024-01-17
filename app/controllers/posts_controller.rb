@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  before_action :authenticate_user!
+  # before_action :authenticate_user!
   def index
     @today = Date.today
     @now = Time.now
@@ -13,8 +13,8 @@ class PostsController < ApplicationController
     end  
 
     # 得点を計算する
-    @comments = current_user.comments.all
-    @points_sum = current_user.comments.sum(:point)
+    # @comments = current_user.comments.all
+    # @points_sum = current_user.comments.sum(:point)
   end
 
   def new

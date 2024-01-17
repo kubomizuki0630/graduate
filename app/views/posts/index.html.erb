@@ -48,13 +48,11 @@
 <br><br><br>
 <% if user_signed_in? %>
 <%= current_user.email %>でログイン中<br>
-<%# if current_user.is_professor? %>
-<%= @points_sum %>/5.0点（残り<%= 5.0- @points_sum %>点）</br>
-<% @comments.each do |t| %>
-  <%= t.post.user.email %>に<%= t.point %>点</br>
-    <% end %>
-    <%# end %>
-    <% end %>
+  <%= current_user.comments.sum(:point) %>/5.0点（残り<%= 5.0- current_user.comments.sum(:point) %>点）</br>
+    <% current_user.comments.all.each do |t| %>
+      <%= t.post.user.email %>に<%= t.point %>点</br>
+  <% end %>
+<% end %>
 
 <%= link_to(new_post_path) do %>
   <i class="fa-solid fa-circle-plus fa-4x text-success"></i>
