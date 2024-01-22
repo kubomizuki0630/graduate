@@ -1,18 +1,28 @@
 <div class="top-image"></div>
 
-<div class="latestposts display-5 text-center mt-5 mb-5">Posts</div>
+<div class="latestposts display-5 text-center mt-5 mb-5">みんなの作品</div>
 <div class="card-container">
   <% @posts.each do |t| %>
-    <div class="card mb-5" style="width: 18rem;">
-      <%= link_to(post_path(t.id),class:'text-decoration-none text-success') do %>
-        <div class="card-header card-title"><%= t.title %></div>
-        <% if t.images.exists? && t.images[0]  %>
-            <%= image_tag t.images[0], class: "card-img-top" %>
-        <% else %>
-          <%= image_tag "noimage.png",class: "card-img-top"  %>
+        <% if user_signed_in? %>
+          <% if current_user.already_liked?(id: t.id, post_id: t.id) %>
+            <div class="card mb-5 red-border" style="width: 18rem;">
+          <% end %>
         <% end %>
-      <% end %>
-      <div class="card-body">
+        <div class="card mb-5" style="width: 18rem;">
+        <%= link_to(user_path(t.user_id),class:'text-decoration-none text-success') do %>
+          <div class="card-header card-title"><%= t.user.email %></div>
+        <% end %>
+        <%= link_to(post_path(t.id),class:'text-decoration-none text-success') do %>
+          <% if t.images.exists? && t.images[0]  %>
+              <%= image_tag t.images[0], class: "card-img-top" %>
+          <% else %>
+            <%= image_tag "noimage.png",class: "card-img-top"  %>
+          <% end %>
+        <% end %>
+        <div class="card-body">
+        <%= link_to(post_path(t.id),class:'text-decoration-none text-success') do %>
+          <div class="card-title"><%= t.title %></div>
+        <% end %>
         <div class="d-flex justify-content-between align-items-center card-body-footer">
           <div class="btn-group">
             <%= link_to "detail", post_path(t.id) ,class: "btn btn-sm btn-outline-secondary" %>
@@ -20,6 +30,16 @@
               <% if current_user.id == t.user_id %>
                 <%= link_to "edit", edit_post_path(t.id) ,class: "btn btn-sm btn-outline-secondary" %>
                 <%= button_to "delete", post_path(t.id), method: :delete ,data: {confirm: "Do you want to delete it?"},class: "btn btn-sm btn-outline-secondary" %>
+              <% else %>
+                <% if current_user.already_liked?(id: t.id, post_id: t.id) %>
+                  <%= button_to post_like_path(id: t.id, post_id: t.id), class: "btn btn-sm btn-secondary" , method: :delete do %>
+                  得点候補解除
+                  <% end %>
+                <% else %>
+                  <%= button_to post_likes_path(id: t.id, post_id: t.id), class: "btn btn-sm btn-outline-secondary" ,method: :post do %>
+                  得点候補
+                  <% end %>
+                <% end %>
               <% end %>
             <% end %>
           </div>
