@@ -43,13 +43,13 @@
   <br><br><br>
   <h1>ここから下は作業場所</h1>
   <% if user_signed_in? %>
-  <% if current_user.already_liked?(@post) %>
-    <%= button_to post_like_path(@post), method: :delete do %>
+  <% if current_user.already_liked?(id: @post.id, post_id: @post.id) %>
+    <%= button_to post_like_path(id: @post.id, post_id: @post.id), method: :delete do %>
       得点候補解除
     <% end %>
     <%#= @post.likes.count %>
   <% else %>
-    <%= button_to post_likes_path(@post), method: :post do %>
+    <%= button_to post_likes_path(id: @post.id, post_id: @post.id), method: :post do %>
       得点候補
     <% end %>
     <%#= @post.likes.count %>
@@ -89,6 +89,7 @@
         <i class="far fa-comments"></i> 送信
       <% end %>
     <% end %>
-  <% end %>
+  <% end %><br>
+  <%= link_to 'Back', request.referer || root_path %>
 </div>
 </div>

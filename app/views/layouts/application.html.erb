@@ -30,6 +30,14 @@
               <li class="nav-item">
                 <%= button_to 'LogOut', destroy_user_session_path, method: :delete ,class:"delete_button nav-link active" %>
               </li>
+              <% if current_user.email.include?('@kyoin') %>
+                <li class="nav-item">
+                  <a href="https://docs.google.com/forms/d/e/1FAIpQLSfHlVgDf4SLV5EMOxmUWrLHNRT0-uNn21qv6o6d60OMpyCbaw/viewform" target="blank" class="delete_button nav-link active" %>【教員用投票リンク】</a>
+                </li>
+              <% else %>
+              <a href="https://forms.gle/3p6bQ72aqNCGuBZW7" target="blank" class="delete_button nav-link active" %>【学生用投票リンク】</a>
+              <% end %>
+
             <% else %>
               <li class="nav-item">
                 <%= link_to "LogIn", new_user_session_path ,class:"text-decoration-none nav-link active" %>

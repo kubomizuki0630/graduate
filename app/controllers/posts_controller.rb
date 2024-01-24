@@ -9,7 +9,7 @@ class PostsController < ApplicationController
       search = params[:search]
       @posts = Post.where("content LIKE ? OR title LIKE ?", "%#{search}%", "%#{search}%").order(id: "DESC").page(params[:page])
     else
-      @posts = Post.all.order(id: "DESC").page(params[:page]).per(3)
+      @posts = Post.all.order(id: "DESC").page(params[:page]).per(9)
     end  
 
     # 得点を計算する
