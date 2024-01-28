@@ -1,75 +1,47 @@
 <div class="container_pt">
   <% if user_signed_in? %>
     <% if @user.id == current_user.id %>
-      <div class="latestposts display-5 text-center mt-5 mb-5">得点をつけた作品 ※非公開</div>
-      <div class="card-container">
-      </div>
-      <div class="latestposts display-5 text-center mt-5 mb-5">得点候補 ※非公開</div>
-      <div class="card-container">
+      <div class="latestposts display-5 text-center mt-5 mb-5"><%= current_user.name %>さんの得点候補 <span class="fs-15">※非公開</span></div>
+      <div class="like_card-container scroll_box">
         <% @user.liked_posts.each do |t| %>
-
           <% if user_signed_in? %>
             <% if current_user.already_liked?(id: t.id, post_id: t.id) %>
-              <div class="card mb-5 red-border" style="width: 18rem;">
-            <% else%>
-              <div class="card mb-5" style="width: 18rem;">
+              <div class="card mb-5 like_card">
+            <% else %>
+              <div class="card mb-5">
             <% end %>
+          <% else %>
+            <div class="card mb-5">
           <% end %>
-            <%= link_to(post_path(t.id),class:'text-decoration-none text-success') do %>
-              <div class="card-header card-title"><%= t.user.email %></div>
-              <% if t.images.exists? && t.images[0]  %>
-                  <%= image_tag t.images[0], class: "card-img-top" %>
-              <% else %>
-                <%= image_tag "noimage.png",class: "card-img-top"  %>
-              <% end %>
-            <% end %>
-            <div class="card-body">
+              <div class="card-header card-title"><%= t.user.name %></div>
+                <%= link_to(post_path(t.id),class:'text-decoration-none text-success') do %>
+                  <% if t.images.exists? && t.images[0]  %>
+                    <%= image_tag t.images[0], class: "card-img-top" %>
+                  <% else %>
+                    <%= image_tag "noimage.png",class: "card-img-top"  %>
+                  <% end %>
+                <% end %>
+              <div class="card-body">
+                <%= link_to(post_path(t.id),class:'text-decoration-none text-success') do %>
+                  <div class="card-title"><%= t.title %></div>
+                <% end %>
               <div class="d-flex justify-content-between align-items-center card-body-footer">
                 <div class="btn-group">
                   <%= link_to "detail", post_path(t.id) ,class: "btn btn-sm btn-outline-secondary" %>
                   <% if user_signed_in? %>
                     <% if current_user.id == t.user_id %>
                       <%= link_to "edit", edit_post_path(t.id) ,class: "btn btn-sm btn-outline-secondary" %>
-                      <%= button_to "delete", post_path(t.id), method: :delete ,data: {confirm: "Do you want to delete it?"},class: "btn btn-sm btn-outline-secondary" %>
+                     <%= button_to "delete", post_path(t.id), method: :delete ,data: {confirm: "Do you want to delete it?"},class: "btn btn-sm btn-outline-secondary" %>
+                    <% else %>
+                      <% if current_user.already_liked?(id: t.id, post_id: t.id) %>
+                        <%= button_to post_like_path(id: t.id, post_id: t.id), class: "btn btn-sm btn-secondary" , method: :delete do %>
+                        得点候補解除
+                        <% end %>
+                      <% else %>
+                        <%= button_to post_likes_path(id: t.id, post_id: t.id), class: "btn btn-sm btn-outline-secondary" ,method: :post do %>
+                        得点候補
+                      <% end %>
                     <% end %>
-                  <% end %>
-                </div>
-                <% if (@now - t.created_at) <= 60 * 60 %>
-                  <small class="text-muted"><%=((@now - t.created_at) / 60).to_i.to_s + "分前" %></small>
-                <% elsif (@now - t.created_at) <= 60 * 60 * 24 %>
-                  <small class="text-muted"><%=((@now - t.created_at) / 3600).to_i.to_s + "時間前" %></small>
-                <% elsif (@today - t.created_at.to_date) <= 30 %>
-                  <small class="text-muted"><%= (@today - t.created_at.to_date).to_i.to_s + "日前" %></small>
-                <% else %>
-                  <small class="text-muted"><%= t.created_at.strftime('%Y-%m-%d') %></small>
-                <% end %>
-              </div>
-            </div>
-          </div>
-        <% end %>
-      </div>
-      <% end %>
-    <% end %>
-      <div class="latestposts display-5 text-center mt-5 mb-5"><%= @user.email %>の作品</div>
-      <div class="card-container">
-      <% @user.posts.each do |t| %>
-        <div class="card mb-5" style="width: 18rem;">
-          <%= link_to(post_path(t.id),class:'text-decoration-none text-success') do %>
-            <div class="card-header card-title"><%= t.user.email %></div>
-            <% if t.images.exists? && t.images[0]  %>
-                <%= image_tag t.images[0], class: "card-img-top" %>
-            <% else %>
-              <%= image_tag "noimage.png",class: "card-img-top"  %>
-            <% end %>
-          <% end %>
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center card-body-footer">
-              <div class="btn-group">
-                <%= link_to "detail", post_path(t.id) ,class: "btn btn-sm btn-outline-secondary" %>
-                <% if user_signed_in? %>
-                  <% if current_user.id == t.user_id %>
-                    <%= link_to "edit", edit_post_path(t.id) ,class: "btn btn-sm btn-outline-secondary" %>
-                    <%= button_to "delete", post_path(t.id), method: :delete ,data: {confirm: "Do you want to delete it?"},class: "btn btn-sm btn-outline-secondary" %>
                   <% end %>
                 <% end %>
               </div>
@@ -85,6 +57,275 @@
             </div>
           </div>
         </div>
-      <% end %>
-    </div>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+
+
+  <% if current_user.email.include?('@design.kyushu-u.ac.jp') %>
+      <div class="latestposts display-5 text-center mt-5 mb-5">教員用得点フォーム</div>
+      <form action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSfHlVgDf4SLV5EMOxmUWrLHNRT0-uNn21qv6o6d60OMpyCbaw/formResponse" method="post" target="hidden_iframe" onsubmit="submitted=true;">
+
+      <input type="hidden" name="entry.1330976122" value=<%= current_user.name %>><br>
+      <select class="form-select" name="entry.744604519">
+        <option value="">得点を入れたい学生①</option>
+        <option value="千田彩奈">千田彩奈</option>
+        <option value="河内拓海">河内拓海</option>
+        <option value="山村真由">山村真由</option>
+        <option value="若松南月">若松南月</option>
+        <option value="井上哲">井上哲</option>
+        <option value="中島夏鈴">中島夏鈴</option>
+        <option value="大塚朋治">大塚朋治</option>
+        <option value="西村優希">西村優希</option>
+        <option value="村越朋香">村越朋香</option>
+        <option value="米田律輝">米田律輝</option>
+        <option value="野崎朱里">野崎朱里</option>
+        <option value="石川泰斗">石川泰斗</option>
+        <option value="重東拓未">重東拓未</option>
+        <option value="横田翔大">横田翔大</option>
+        <option value="角田耕輔">角田耕輔</option>
+        <option value="志賀南海">志賀南海</option>
+        <option value="吉田一輝">吉田一輝</option>
+        <option value="有野賢汰">有野賢汰</option>
+        <option value="大山悠理">大山悠理</option>
+        <option value="服部太洋">服部太洋</option>
+        <option value="都築七海">都築七海</option>
+        <option value="小池愛佳">小池愛佳</option>
+        <option value="松下藍">松下藍</option>
+        <option value="道祖浩満">道祖浩満</option>
+        <option value="米澤真桜">米澤真桜</option>
+        <option value="向山恵介">向山恵介</option>
+        <option value="久保瑞希">久保瑞希</option>
+        <option value="江塚琢眞">江塚琢眞</option>
+        <option value="片山拓人">片山拓人</option>
+        <option value="井福規介">井福規介</option>
+      </select><br>
+      <input class="form-check-input" type="radio" name="entry.711225215" value=1> 1
+      <input class="form-check-input" type="radio" name="entry.711225215" value=2> 2
+      <input class="form-check-input" type="radio" name="entry.711225215" value=3> 3
+      <input class="form-check-input" type="radio" name="entry.711225215" value=4> 4
+      <input class="form-check-input" type="radio" name="entry.711225215" value=5> 5
+      <br><br>
+        <select class="form-select" name="entry.856923514">
+          <option value="">得点を入れたい学生②</option>
+          <option value="千田彩奈">千田彩奈</option>
+          <option value="河内拓海">河内拓海</option>
+          <option value="山村真由">山村真由</option>
+          <option value="若松南月">若松南月</option>
+          <option value="井上哲">井上哲</option>
+          <option value="中島夏鈴">中島夏鈴</option>
+          <option value="大塚朋治">大塚朋治</option>
+          <option value="西村優希">西村優希</option>
+          <option value="村越朋香">村越朋香</option>
+          <option value="米田律輝">米田律輝</option>
+          <option value="野崎朱里">野崎朱里</option>
+          <option value="石川泰斗">石川泰斗</option>
+          <option value="重東拓未">重東拓未</option>
+          <option value="横田翔大">横田翔大</option>
+          <option value="角田耕輔">角田耕輔</option>
+          <option value="志賀南海">志賀南海</option>
+          <option value="吉田一輝">吉田一輝</option>
+          <option value="有野賢汰">有野賢汰</option>
+          <option value="大山悠理">大山悠理</option>
+          <option value="服部太洋">服部太洋</option>
+          <option value="都築七海">都築七海</option>
+          <option value="小池愛佳">小池愛佳</option>
+          <option value="松下藍">松下藍</option>
+          <option value="道祖浩満">道祖浩満</option>
+          <option value="米澤真桜">米澤真桜</option>
+          <option value="向山恵介">向山恵介</option>
+          <option value="久保瑞希">久保瑞希</option>
+          <option value="江塚琢眞">江塚琢眞</option>
+          <option value="片山拓人">片山拓人</option>
+          <option value="井福規介">井福規介</option>
+        </select><br>
+        <input class="form-check-input" type="radio" name="entry.1065568820" value=1> 1
+        <input class="form-check-input" type="radio" name="entry.1065568820" value=2> 2
+        <input class="form-check-input" type="radio" name="entry.1065568820" value=3> 3
+        <input class="form-check-input" type="radio" name="entry.1065568820" value=4> 4
+        <input class="form-check-input" type="radio" name="entry.1065568820" value=5> 5
+        <br><br>
+        <select class="form-select" name="entry.1760222056">
+          <option value="">得点を入れたい学生③</option>
+          <option value="千田彩奈">千田彩奈</option>
+          <option value="河内拓海">河内拓海</option>
+          <option value="山村真由">山村真由</option>
+          <option value="若松南月">若松南月</option>
+          <option value="井上哲">井上哲</option>
+          <option value="中島夏鈴">中島夏鈴</option>
+          <option value="大塚朋治">大塚朋治</option>
+          <option value="西村優希">西村優希</option>
+          <option value="村越朋香">村越朋香</option>
+          <option value="米田律輝">米田律輝</option>
+          <option value="野崎朱里">野崎朱里</option>
+          <option value="石川泰斗">石川泰斗</option>
+          <option value="重東拓未">重東拓未</option>
+          <option value="横田翔大">横田翔大</option>
+          <option value="角田耕輔">角田耕輔</option>
+          <option value="志賀南海">志賀南海</option>
+          <option value="吉田一輝">吉田一輝</option>
+          <option value="有野賢汰">有野賢汰</option>
+          <option value="大山悠理">大山悠理</option>
+          <option value="服部太洋">服部太洋</option>
+          <option value="都築七海">都築七海</option>
+          <option value="小池愛佳">小池愛佳</option>
+          <option value="松下藍">松下藍</option>
+          <option value="道祖浩満">道祖浩満</option>
+          <option value="米澤真桜">米澤真桜</option>
+          <option value="向山恵介">向山恵介</option>
+          <option value="久保瑞希">久保瑞希</option>
+          <option value="江塚琢眞">江塚琢眞</option>
+          <option value="片山拓人">片山拓人</option>
+          <option value="井福規介">井福規介</option>
+        </select><br>
+        <input class="form-check-input" type="radio" name="entry.430238776" value=1> 1
+        <input class="form-check-input" type="radio" name="entry.430238776" value=2> 2
+        <input class="form-check-input" type="radio" name="entry.430238776" value=3> 3
+        <input class="form-check-input" type="radio" name="entry.430238776" value=4> 4
+        <input class="form-check-input" type="radio" name="entry.430238776" value=5> 5
+        <br><br>
+
+        <select class="form-select" name="entry.854926385">
+          <option value="">得点を入れたい学生④</option>
+          <option value="千田彩奈">千田彩奈</option>
+          <option value="河内拓海">河内拓海</option>
+          <option value="山村真由">山村真由</option>
+          <option value="若松南月">若松南月</option>
+          <option value="井上哲">井上哲</option>
+          <option value="中島夏鈴">中島夏鈴</option>
+          <option value="大塚朋治">大塚朋治</option>
+          <option value="西村優希">西村優希</option>
+          <option value="村越朋香">村越朋香</option>
+          <option value="米田律輝">米田律輝</option>
+          <option value="野崎朱里">野崎朱里</option>
+          <option value="石川泰斗">石川泰斗</option>
+          <option value="重東拓未">重東拓未</option>
+          <option value="横田翔大">横田翔大</option>
+          <option value="角田耕輔">角田耕輔</option>
+          <option value="志賀南海">志賀南海</option>
+          <option value="吉田一輝">吉田一輝</option>
+          <option value="有野賢汰">有野賢汰</option>
+          <option value="大山悠理">大山悠理</option>
+          <option value="服部太洋">服部太洋</option>
+          <option value="都築七海">都築七海</option>
+          <option value="小池愛佳">小池愛佳</option>
+          <option value="松下藍">松下藍</option>
+          <option value="道祖浩満">道祖浩満</option>
+          <option value="米澤真桜">米澤真桜</option>
+          <option value="向山恵介">向山恵介</option>
+          <option value="久保瑞希">久保瑞希</option>
+          <option value="江塚琢眞">江塚琢眞</option>
+          <option value="片山拓人">片山拓人</option>
+          <option value="井福規介">井福規介</option>
+        </select><br>
+        <input class="form-check-input" type="radio" name="entry.91788364" value=1> 1
+        <input class="form-check-input" type="radio" name="entry.91788364" value=2> 2
+        <input class="form-check-input" type="radio" name="entry.91788364" value=3> 3
+        <input class="form-check-input" type="radio" name="entry.91788364" value=4> 4
+        <input class="form-check-input" type="radio" name="entry.91788364" value=5> 5
+        <br><br>
+
+        <select class="form-select" name="entry.764589766">
+          <option value="">得点を入れたい学生⑤</option>
+          <option value="千田彩奈">千田彩奈</option>
+          <option value="河内拓海">河内拓海</option>
+          <option value="山村真由">山村真由</option>
+          <option value="若松南月">若松南月</option>
+          <option value="井上哲">井上哲</option>
+          <option value="中島夏鈴">中島夏鈴</option>
+          <option value="大塚朋治">大塚朋治</option>
+          <option value="西村優希">西村優希</option>
+          <option value="村越朋香">村越朋香</option>
+          <option value="米田律輝">米田律輝</option>
+          <option value="野崎朱里">野崎朱里</option>
+          <option value="石川泰斗">石川泰斗</option>
+          <option value="重東拓未">重東拓未</option>
+          <option value="横田翔大">横田翔大</option>
+          <option value="角田耕輔">角田耕輔</option>
+          <option value="志賀南海">志賀南海</option>
+          <option value="吉田一輝">吉田一輝</option>
+          <option value="有野賢汰">有野賢汰</option>
+          <option value="大山悠理">大山悠理</option>
+          <option value="服部太洋">服部太洋</option>
+          <option value="都築七海">都築七海</option>
+          <option value="小池愛佳">小池愛佳</option>
+          <option value="松下藍">松下藍</option>
+          <option value="道祖浩満">道祖浩満</option>
+          <option value="米澤真桜">米澤真桜</option>
+          <option value="向山恵介">向山恵介</option>
+          <option value="久保瑞希">久保瑞希</option>
+          <option value="江塚琢眞">江塚琢眞</option>
+          <option value="片山拓人">片山拓人</option>
+          <option value="井福規介">井福規介</option>
+        </select><br>
+        <input class="form-check-input" type="radio" name="entry.1859199112" value=1> 1
+        <input class="form-check-input" type="radio" name="entry.1859199112" value=2> 2
+        <input class="form-check-input" type="radio" name="entry.1859199112" value=3> 3
+        <input class="form-check-input" type="radio" name="entry.1859199112" value=4> 4
+        <input class="form-check-input" type="radio" name="entry.1859199112" value=5> 5
+        <br><br>
+      <button class="btn btn-success" type="submit">送信</button>
+      </form>
+      <script>
+        let submitted = false;
+        const page_transition = function () {
+            if(submitted){
+              window.location.href = '<%= thanks_path %>';
+            }
+        }
+      </script>    
+      <iframe name="hidden_iframe" style="display:none;" onload="page_transition()"></iframe>
+  <% else %>
+    <div class="latestposts display-5 text-center mt-5 mb-5">学生用得点フォーム</div>
+    <form action="https://docs.google.com/forms/u/0/d/e/1FAIpQLScV1xsHKPTy-Z-CvNXC1d-YXK923_2paBT_1Jysk5kAbsI6sQ/formResponse" method="post" target="hidden_iframe" onsubmit="submitted=true;">
+
+    <input type="hidden" name="entry.1330976122" value=<%= current_user.name %>><br>
+    <select class="form-select" name="entry.744604519">
+      <option value="">得点を入れたい学生</option>
+      <option value="千田彩奈">千田彩奈</option>
+      <option value="河内拓海">河内拓海</option>
+      <option value="山村真由">山村真由</option>
+      <option value="若松南月">若松南月</option>
+      <option value="井上哲">井上哲</option>
+      <option value="中島夏鈴">中島夏鈴</option>
+      <option value="大塚朋治">大塚朋治</option>
+      <option value="西村優希">西村優希</option>
+      <option value="村越朋香">村越朋香</option>
+      <option value="米田律輝">米田律輝</option>
+      <option value="野崎朱里">野崎朱里</option>
+      <option value="石川泰斗">石川泰斗</option>
+      <option value="重東拓未">重東拓未</option>
+      <option value="横田翔大">横田翔大</option>
+      <option value="角田耕輔">角田耕輔</option>
+      <option value="志賀南海">志賀南海</option>
+      <option value="吉田一輝">吉田一輝</option>
+      <option value="有野賢汰">有野賢汰</option>
+      <option value="大山悠理">大山悠理</option>
+      <option value="服部太洋">服部太洋</option>
+      <option value="都築七海">都築七海</option>
+      <option value="小池愛佳">小池愛佳</option>
+      <option value="松下藍">松下藍</option>
+      <option value="道祖浩満">道祖浩満</option>
+      <option value="米澤真桜">米澤真桜</option>
+      <option value="向山恵介">向山恵介</option>
+      <option value="久保瑞希">久保瑞希</option>
+      <option value="江塚琢眞">江塚琢眞</option>
+      <option value="片山拓人">片山拓人</option>
+      <option value="井福規介">井福規介</option>
+    </select><br>
+      <div class="text-right">
+        <button class="btn btn-success" type="submit">送信</button>
+      </div>
+    </form>
+    <script>
+      let submitted = false;
+      const page_transition = function () {
+          if(submitted){
+            window.location.href = '<%= thanks_path %>';
+          }
+      }
+    </script>    
+    <iframe name="hidden_iframe" style="display:none;" onload="page_transition()"></iframe>
+  <% end %>
 </div>

@@ -1,26 +1,40 @@
 <div class="container_pt">
-  <h3 class="mb-4">edit post</h3>
+  <h3 class="mb-4">new post</h3>
   <%= form_for @post do |f| %>
     <div class="form-group">
-      <%= f.label :title %>
+      <%= f.label :title ,class:"form-label" %>
       <%= f.text_field :title, class:"form-control form-control-lg mb-3" %>
     </div>
     <div class="form-group">
-    <%= f.label :images %><br>
-    <%= f.file_field :images, multiple: true, class:"form-control-file mb-3" %>
+    <%= f.label :images ,"Image" ,class:"form-label"  %><br>
+    <%= f.file_field :images, multiple: true, class:"form-control mb-3" %>
+    <p class="form_explain">
+      <b>編集しない場合も画像は再度ご入力ください</b><br>
+      プレボ写真を添付ください（模型写真は任意）<br>
+      複数の画像を選択する場合は、shiftやcommandキーを押しながら選択してください。<br>
+      プレボ画像は必ずスクショして添付してください。
+    </p>
     </div>
     <div class="form-group">
-      <%= f.label :youtube_url %>
-      <%= f.text_field :youtube_url, class:"form-control form-control-lg mb-3" %>
-    </div>
-    <div class="form-group">
-      <%= f.label :skechfab %>
-      <%= f.text_field :skechfab, class:"form-control form-control-lg mb-3" %>
-    </div>
-    <div class="form-group">
-    <%= f.label :content %>
+    <%= f.label :content ,class:"form-label" %>
     <%= f.text_area :content, class:"form-control form-control-lg textarea mb-3",placeholder:"<コンセプト>\n<工夫した点>\n<苦労した点>\n etc..." %>
     </div>
+    <div class="form-group">
+      <%= f.label :youtube_url  ,"YouTube url (任意)",class:"form-label" %>
+      <%= f.text_field :youtube_url, class:"form-control form-control-lg mb-3" %>
+      <p class="form_explain">
+      動画を共有したい場合は、YouTubeにデータをアップロードし、その共有リンクを<b>再度</b>添付ください。
+    </p>
+    </div>
+    <div class="form-group">
+      <%= f.label :skechfab ,"Skechfab url (任意)",class:"form-label" %>
+      <%= f.text_field :skechfab, class:"form-control form-control-lg mb-3" %>
+      <p class="form_explain">
+      3Dデータを共有したい場合は、skechfabにデータをアップロードし、その共有リンクを<b>再度</b>添付ください。
+    </p>
+    </div><br>
     <%= f.submit "post",class:"btn btn-success" %>
   <% end %>
+  <br>
+  <%= link_to 'Back', request.referer || root_path %>
 </div>

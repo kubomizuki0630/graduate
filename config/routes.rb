@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   devise_for :users
   root 'posts#index'
   get "/about" => "posts#about"
+  get "/thanks" => "posts#thanks" ,as: 'thanks'
   resources :posts do
     resources :likes, only: [:create, :destroy]
     resources :comments, only: [:create]

@@ -11,24 +11,30 @@
   </h3>
   <% if @post.images.exists? && @post.images[0] %>
       <% @post.images.each do |image| %>
-        <%= image_tag image , class: "show-image" %>
+        <a href= <%= rails_blob_path(image) %> data-lightbox="group">
+          <%= image_tag image , class: "show-image" %>
+        </a>
       <% end %>
   <% else %>
       <%= image_tag "noimage.png",class: "show-image"  %>
   <% end %>
-</div>
-<br><br><br>
-<% unless (@post.youtube_url==nil) || (@post.youtube_url=="") %>
-<iframe class="embedded_link"  src="https://www.youtube.com/embed/<%= @post.youtube_url %>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-<% end %>
 
-<% if @post.skechfab? %>
-<iframe class="embedded_link" frameborder="0" allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking execution-while-out-of-viewport execution-while-not-rendered web-share src="https://sketchfab.com/models/<%= @post.skechfab %>/embed"> </iframe> 
-<% end %>
-<div class="show-body">
-<h3 class="fz-20">content</h3>
-  <p><%= text_url_to_link(safe_join((h(@post.content)).split("\n"),tag(:br))).html_safe %></p>
-</div>
+  <% unless (@post.youtube_url==nil) || (@post.youtube_url=="") %>
+  <iframe class="embedded_link"  src="https://www.youtube.com/embed/<%= @post.youtube_url %>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  <% end %>
+
+  <% if @post.skechfab? %>
+  <iframe class="embedded_link" frameborder="0" allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking execution-while-out-of-viewport execution-while-not-rendered web-share src="https://sketchfab.com/models/<%= @post.skechfab %>/embed"> </iframe> 
+  <% end %>
+  
+  
+  <% if @post.skechfab? %>
+    <div class="show-body">
+      <h3 class="fz-20">content</h3>
+      <p><%= text_url_to_link(safe_join((h(@post.content)).split("\n"),tag(:br))).html_safe %></p>
+    </div>
+  <% end %>
+  <br><br>
   <% if (@now - @post.created_at) <= 60 * 60 %>
     <small class="text-muted"><%=((@now - @post.created_at) / 60).to_i.to_s + "分前" %></small>
   <% elsif (@now - @post.created_at) <= 60 * 60 * 24 %>
@@ -38,58 +44,45 @@
   <% else %>
     <small class="text-muted"><%= @post.created_at.strftime('%Y-%m-%d') %></small>
   <% end %>
-
-
   <br><br><br>
-  <h1>ここから下は作業場所</h1>
   <% if user_signed_in? %>
-  <% if current_user.already_liked?(id: @post.id, post_id: @post.id) %>
-    <%= button_to post_like_path(id: @post.id, post_id: @post.id), method: :delete do %>
-      得点候補解除
+    <% if current_user.already_liked?(id: @post.id, post_id: @post.id) %>
+      <%= button_to post_like_path(id: @post.id, post_id: @post.id), class: "btn btn-sm btn-secondary",method: :delete do %>
+        得点候補解除
+      <% end %>
+    <% else %>
+      <%= button_to post_likes_path(id: @post.id, post_id: @post.id), class: "btn btn-sm btn-outline-secondary", method: :post do %>
+        得点候補に入れる
+      <% end %>
     <% end %>
-    <%#= @post.likes.count %>
-  <% else %>
-    <%= button_to post_likes_path(id: @post.id, post_id: @post.id), method: :post do %>
-      得点候補
-    <% end %>
-    <%#= @post.likes.count %>
   <% end %>
-<% else %>
-  <%#= @post.likes.count %>
-<% end %>
 
 <br>
 <div class="comment-wrapper">
   <h3>comments</h3>
-  <% @comments.each do |c| %>
-    <div>
-      <% if c.point?%>
-        <%= c.user.email unless c.user.blank? %>：<%= c.point %>点
-        <br>
-        <%= c.content %>
-      <% else %>
-        <%= c.user.email unless c.user.blank? %>：
-        <br>
-        <%= c.content %>
-      <% end %>
-    </div>
-  <% end %>
+  <div class="comments_container">
 
+  <% unless @comments.exists? %>
+  <div class="comments_item">
+    <span class="text-secondary">コメントがありません</span>
+  </div>
+  <% else %>
+    <% @comments.each do |c| %>
+      <div class="comments_item">
+        <span class="fb-comment"><%= c.user.name %></span><br>
+        <%= text_url_to_link(safe_join((h(c.content)).split("\n"),tag(:br))).html_safe %>
+      </div>
+    <% end %>
+  <% end %>
+  </div>
   <% if user_signed_in? %>
     <%= form_with(model: [@post, @comment], local: true) do |f| %>
-      <コメント><br>
-      <%= f.text_area :content %><br><br>
-    <%# if current_user.is_professor? %>
-      <点数><br>
-      <p>※半角数字のみ入力</p>
-      <p>※0点は記入する必要ありません</p>
-      <%= f.number_field :point ,step: "0.1" %> 点<br><br>
-    <%# end %>
-      <%= button_tag type: "submit" do %>
+      <%= f.text_area :content ,class:"form-control", placeholder:"コメントする" %><br>
+      <%= button_tag type: "submit", class: "btn btn-sm btn-success" do %>
         <i class="far fa-comments"></i> 送信
       <% end %>
     <% end %>
   <% end %><br>
-  <%= link_to 'Back', request.referer || root_path %>
+  <%= link_to 'Back' , request.referer || root_path ,class:"text-decoration-none"%>
 </div>
 </div>
