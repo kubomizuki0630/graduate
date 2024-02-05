@@ -2,36 +2,51 @@
   <h3 class="mb-4">new post</h3>
   <%= form_for @post do |f| %>
     <div class="form-group">
-      <%= f.label :title ,class:"form-label" %>
+      <%= f.label :title ,"Title (日本語)",class:"form-label" %><span class="must_form">*</span>
       <%= f.text_field :title, class:"form-control form-control-lg mb-3" %>
-    </div>
+    </div><br>
     <div class="form-group">
-    <%= f.label :images ,"Image" ,class:"form-label"  %><br>
+      <%= f.label :en_title ,"Title (英語)" ,class:"form-label" %><span class="must_form">*</span>
+      <%= f.text_field :en_title, class:"form-control form-control-lg mb-3" %>
+    </div><br>
+    <div class="form-group">
+    <%= f.label :images ,"Image" ,class:"form-label"  %><span class="must_form">*</span><br>
     <%= f.file_field :images, multiple: true, class:"form-control mb-3" %>
     <p class="form_explain">
-      プレボ写真を添付ください（模型写真は任意）<br>
+      プレボ写真を添付ください。<br>
       複数の画像を選択する場合は、shiftやcommandキーを押しながら選択してください。<br>
-      プレボ画像は必ずスクショして添付してください。
+      プレボ画像は必ずスクショして添付してください（jpegもしくはpng形式）<br>
+      1ファイル15MBを超えるファイルはアップロードできません。
     </p>
-    </div>
+    </div><br>
     <div class="form-group">
-    <%= f.label :content ,class:"form-label" %>
-    <%= f.text_area :content, class:"form-control form-control-lg textarea mb-3",placeholder:"<コンセプト>\n<工夫した点>\n<苦労した点>\n etc..." %>
-    </div>
+    <%= f.label :content,"Summary (日本語)" ,class:"form-label" %><span class="must_form">*</span>
+    <%= f.text_area :content, class:"form-control form-control-lg textarea mb-3" %>
+    <p class="form_explain">
+    日本語で作品の概要をご記入ください（200字程度）<br>
+    </p>
+    </div><br>
+    <div class="form-group">
+    <%= f.label :en_content,"Summary (英語)" ,class:"form-label" %><span class="must_form">*</span>
+    <%= f.text_area :en_content, class:"form-control form-control-lg textarea mb-3" %>
+    <p class="form_explain">
+      英語で作品の概要をご記入ください（150words）
+    </p>
+    </div><br>
     <div class="form-group">
       <%= f.label :youtube_url  ,"YouTube url (任意)",class:"form-label" %>
       <%= f.text_field :youtube_url, class:"form-control form-control-lg mb-3" %>
       <p class="form_explain">
       動画を共有したい場合は、YouTubeにデータをアップロードし、その共有リンクを添付ください。
     </p>
-    </div>
+    </div><br>
     <div class="form-group">
       <%= f.label :skechfab ,"Skechfab url (任意)",class:"form-label" %>
       <%= f.text_field :skechfab, class:"form-control form-control-lg mb-3" %>
       <p class="form_explain">
       3Dデータを共有したい場合は、skechfabにデータをアップロードし、その共有リンクを添付ください。
     </p>
-    </div><br>
+    </div><br><br>
     <%= f.submit "post",class:"btn btn-success" %>
   <% end %>
 </div>

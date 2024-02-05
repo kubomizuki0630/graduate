@@ -97,6 +97,10 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light{
   .textarea{
     height: 150px;
   }
+
+  .must_form{
+    color: red;
+  }
   
   .fb{
     font-weight: bold;
@@ -158,12 +162,12 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light{
   
   .title_mb{
     padding: 10px;
-    width: 80%;
+    width: 100%;
   }
   
   .show-body{
     padding-top: 20px;
-    height: 30vh;
+    min-height: 5vh;
   }
   
 .edit_link{
@@ -233,9 +237,9 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light{
   min-height: 200px;
 }
 
-div.card.mb-5.like_card{
+div.card.like_card{
   width: 18rem;
-  margin: 5px;
+  margin: 10px;
   flex-shrink: 0;
 }
 
@@ -265,3 +269,82 @@ div.card.mb-5.like_card{
 .like_card_container::-webkit-scrollbar-track {
   background: #ddd; /* トラックの色 */
 }
+
+.no_favorite{
+  width: 100%;
+  display: flex;
+  justify-content: center; /* 横方向（左右）中央揃え */
+  align-items: center; /* 縦方向（上下）中央揃え */
+}
+
+.likecard-form{
+  margin-bottom: 15px;
+}
+
+// .like_form-group{
+//   width: 100%;
+// }
+
+// .like_form{
+//   width: 100%;
+// }
+
+.like_form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.vote_form{
+  width: 80%;
+}
+
+
+.vote_container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#totalDisplay{
+  position:fixed;
+  font-size: 15px;
+  right:3%;
+  bottom:7%;
+}
+.under-right{
+  position:fixed;
+  right:3%;
+  bottom:2.5%;
+}
+
+.form_scroll{
+  width: 100%;
+  height: 30vh;
+  overflow: auto;
+  padding: 0px 15px;
+  border: 1px #c0c0c0 solid;
+  background-color: #F8F9FA;
+}
+
+.like-btn {
+  // width: 25px;
+  font-size: 20px;
+  color: #808080; 
+  }
+ 
+ .unlike-btn {
+  // width: 25px;
+  font-size: 20px;
+  color: #e54747;
+  }
+  .btn.btn-sm.btn-outline-secondary{
+    // font-size: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5%;
+  }

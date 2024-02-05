@@ -1,6 +1,7 @@
 <div class="container_pt">
   <h3 class="title_mb">
     <%= @post.title %>
+    <%= @post.en_title %>
     <% if user_signed_in? %>
       <% if current_user.id == @post.user_id %>
         <%= link_to  edit_post_path(@post.id) do %>
@@ -28,10 +29,18 @@
   <% end %>
   
   
-  <% if @post.skechfab? %>
+  <% if @post.content? %>
     <div class="show-body">
-      <h3 class="fz-20">content</h3>
+      <h3 class="fz-20">Summary (Japanese)</h3>
       <p><%= text_url_to_link(safe_join((h(@post.content)).split("\n"),tag(:br))).html_safe %></p>
+    </div>
+  <% end %>
+  <br><br>
+
+  <% if @post.en_content? %>
+    <div class="show-body">
+      <h3 class="fz-20">Summary (English)</h3>
+      <p><%= text_url_to_link(safe_join((h(@post.en_content)).split("\n"),tag(:br))).html_safe %></p>
     </div>
   <% end %>
   <br><br>
@@ -47,12 +56,12 @@
   <br><br><br>
   <% if user_signed_in? %>
     <% if current_user.already_liked?(id: @post.id, post_id: @post.id) %>
-      <%= button_to post_like_path(id: @post.id, post_id: @post.id), class: "btn btn-sm btn-secondary",method: :delete do %>
-        得点候補解除
+      <%= button_to post_like_path(id: @post.id, post_id: @post.id), class: "btn btn-link",method: :delete do %>
+        <i class="fa-solid fa-thumbs-up unlike-btn"></i>
       <% end %>
     <% else %>
-      <%= button_to post_likes_path(id: @post.id, post_id: @post.id), class: "btn btn-sm btn-outline-secondary", method: :post do %>
-        得点候補に入れる
+      <%= button_to post_likes_path(id: @post.id, post_id: @post.id), class: "btn btn-link", method: :post do %>
+        <i class="fa-regular fa-thumbs-up like-btn"></i>
       <% end %>
     <% end %>
   <% end %>

@@ -37,12 +37,12 @@
                 <%= button_to "delete", post_path(t.id), method: :delete ,data: {confirm: "Do you want to delete it?"},class: "btn btn-sm btn-outline-secondary" %>
               <% else %>
                 <% if current_user.already_liked?(id: t.id, post_id: t.id) %>
-                  <%= button_to post_like_path(id: t.id, post_id: t.id), class: "btn btn-sm btn-secondary" , method: :delete do %>
-                  得点候補解除
+                  <%= button_to post_like_path(id: t.id, post_id: t.id), class: "btn btn-link" , method: :delete do %>
+                    <i class="fa-solid fa-thumbs-up unlike-btn"></i>
                   <% end %>
                 <% else %>
-                  <%= button_to post_likes_path(id: t.id, post_id: t.id), class: "btn btn-sm btn-outline-secondary" ,method: :post do %>
-                  得点候補
+                  <%= button_to post_likes_path(id: t.id, post_id: t.id), class: "btn btn-link" ,method: :post do %>
+                    <i class="fa-regular fa-thumbs-up like-btn"></i>
                   <% end %>
                 <% end %>
               <% end %>
