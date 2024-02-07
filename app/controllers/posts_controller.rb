@@ -76,6 +76,6 @@ class PostsController < ApplicationController
   
   private
   def post_params
-    params.require(:post).permit(:content,:title,:youtube_url,:skechfab,:en_content,:en_title, images:[])
+    params.require(:post).permit(:content,:title,:youtube_url,:skechfab,:encontent,:entitle, images:[])
   end
 end

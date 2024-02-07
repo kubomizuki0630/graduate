@@ -1,7 +1,7 @@
 <div class="container_pt">
   <h3 class="title_mb">
     <%= @post.title %>
-    <%= @post.en_title %>
+    <%= @post.entitle %>
     <% if user_signed_in? %>
       <% if current_user.id == @post.user_id %>
         <%= link_to  edit_post_path(@post.id) do %>
@@ -37,10 +37,10 @@
   <% end %>
   <br><br>
 
-  <% if @post.en_content? %>
+  <% if @post.encontent? %>
     <div class="show-body">
       <h3 class="fz-20">Summary (English)</h3>
-      <p><%= text_url_to_link(safe_join((h(@post.en_content)).split("\n"),tag(:br))).html_safe %></p>
+      <p><%= text_url_to_link(safe_join((h(@post.encontent)).split("\n"),tag(:br))).html_safe %></p>
     </div>
   <% end %>
   <br><br>
