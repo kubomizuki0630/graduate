@@ -6,10 +6,6 @@
       <%= f.text_field :title, class:"form-control form-control-lg mb-3" %>
     </div><br>
     <div class="form-group">
-      <%= f.label :entitle ,"Title (英語)" ,class:"form-label" %><span class="must_form">*</span>
-      <%= f.text_field :entitle, class:"form-control form-control-lg mb-3" %>
-    </div><br>
-    <div class="form-group">
     <%= f.label :images ,"Image" ,class:"form-label"  %><span class="must_form">*</span><br>
     <%= f.file_field :images, multiple: true, class:"form-control mb-3" %>
     <p class="form_explain">
@@ -24,13 +20,6 @@
     <%= f.text_area :content, class:"form-control form-control-lg textarea mb-3" %>
     <p class="form_explain">
     日本語で作品の概要をご記入ください（200字程度）<br>
-    </p>
-    </div><br>
-    <div class="form-group">
-    <%= f.label :encontent,"Summary (英語)" ,class:"form-label" %><span class="must_form">*</span>
-    <%= f.text_area :encontent, class:"form-control form-control-lg textarea mb-3" %>
-    <p class="form_explain">
-      英語で作品の概要をご記入ください（150words）
     </p>
     </div><br>
     <div class="form-group">
