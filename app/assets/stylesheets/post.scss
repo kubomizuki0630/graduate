@@ -229,16 +229,20 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light{
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  margin: 25px 10%;
-  border: 1px #c0c0c0 solid;
-  color: #030303;
-  overflow-x: scroll;
   white-space: nowrap;
   min-height: 200px;
 }
 
+.scroll_box{
+  margin: 25px 10%;
+  border: 1px #c0c0c0 solid;
+  color: #030303;
+  overflow-x: scroll;
+  min-height: 200px;
+}
+
 div.card.like_card{
-  width: 18rem;
+  width: 16rem;
   margin: 10px;
   flex-shrink: 0;
 }
@@ -258,15 +262,15 @@ div.card.like_card{
 //   white-space: nowrap;
 // }
 
-.like_card_container::-webkit-scrollbar {
+.scroll_box::-webkit-scrollbar {
   height: 10px; /* スクロールバーの高さ */
 }
 
-.like_card_container::-webkit-scrollbar-thumb {
+.scroll_box::-webkit-scrollbar-thumb {
   background: #aaa; /* ツマミの色 */
 }
 
-.like_card_container::-webkit-scrollbar-track {
+.scroll_box::-webkit-scrollbar-track {
   background: #ddd; /* トラックの色 */
 }
 
@@ -285,29 +289,56 @@ div.card.like_card{
 //   width: 100%;
 // }
 
-// .like_form{
-//   width: 100%;
+.like_form{
+  width: 16rem;
+  // width: 33%;
+  margin: 10px;
+  flex-shrink: 0;
+}
+.like_form::placeholder {
+  color: rgba(117, 117, 117, 0.8);
+}
+
+// .like_form-group {
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   justify-content: center;
+//   text-align: center;
+  
 // }
 
-.like_form-group {
+.vote_form {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  white-space: nowrap;
 }
 
-.vote_form{
-  width: 80%;
-}
-
-
-.vote_container{
+.like_card-container{
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  min-height: 200px;
 }
+
+// .like_form-container{
+//   // display: flex;
+//   // flex-direction: row;
+//   // flex-wrap: nowrap;
+//   // white-space: nowrap;
+//   // min-height: 200px;
+//   display: flex;
+//   justify-content: space-between;
+// }
+
+// .vote_container{
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   justify-content: center;
+// }
 
 #totalDisplay{
   position:fixed;
@@ -348,3 +379,31 @@ div.card.like_card{
     align-items: center;
     border-radius: 5%;
   }
+
+.zasekihyo{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin:25px 10%;
+}
+
+.zasekihyo-item{
+  width: 30%;
+  padding: 5px;
+  align-items: center;
+  border: 1px black solid;
+}
+
+.vote-link{
+  width: 100%;
+  margin-top: 2%;
+}
+
+.vote-btn{
+  background-color: green;
+  padding: 10px;
+  text-decoration: none;
+  color: white;
+  border-radius: 3px;
+}

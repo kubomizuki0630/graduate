@@ -2,67 +2,89 @@
   <% if user_signed_in? %>
     <% if @user.id == current_user.id %>
       <div class="latestposts display-5 text-center mt-5 mb-5"><%= current_user.name %>’s Favorite</div>
-      <div class="like_card-container scroll_box">
+      <div class="scroll_box">
         <% unless @user.liked_posts.exists?  %>
           <div class="no_favorite">
             <div class="no_favorite_item"><a href="/">作品一覧</a>からいいねボタンを押すと、得点候補の作品が追加されます</div>
           </div>
         <% else %>
-          <% @user.liked_posts.each do |t| %>
-            <% if user_signed_in? %>
-              <% if current_user.already_liked?(id: t.id, post_id: t.id) %>
-                <div class="card like_card">
+          <div class="like_card-container">
+            <% @user.liked_posts.includes(:user).each do |t| %>
+              <% if user_signed_in? %>
+                <% if current_user.already_liked?(id: t.id, post_id: t.id) %>
+                  <div class="card like_card">
+                <% else %>
+                  <div class="card mb-5">
+                <% end %>
               <% else %>
                 <div class="card mb-5">
               <% end %>
-            <% else %>
-              <div class="card mb-5">
-            <% end %>
-                <div class="card-header card-title"><%= t.user.name %></div>
-                  <%= link_to(post_path(t.id),class:'text-decoration-none text-success') do %>
-                    <% if t.images.exists? && t.images[0]  %>
-                      <%= image_tag t.images[0], class: "card-img-top" %>
-                    <% else %>
-                      <%= image_tag "noimage.png",class: "card-img-top"  %>
+                  <div class="card-header card-title"><%= t.user.name %></div>
+                    <%= link_to(post_path(t.user_id),class:'text-decoration-none text-success') do %>
+                      <% if t.images.exists? && t.images[0]  %>
+                        <%= image_tag t.images[0], class: "card-img-top" %>
+                      <% else %>
+                        <%= image_tag "noimage.png",class: "card-img-top"  %>
+                      <% end %>
                     <% end %>
-                  <% end %>
-                <div class="card-body">
-                    <%= link_to(post_path(t.id),class:'text-decoration-none text-success') do %>
-                      <div class="card-title"><%= t.title %></div>
-                    <% end %>
-                  <div class="d-flex justify-content-between align-items-center card-body-footer">
-                    <div class="btn-group">
-                      <%= link_to "detail", post_path(t.id) ,class: "btn btn-sm btn-outline-secondary" %>
-                      <% if user_signed_in? %>
-                        <% if current_user.id == t.user_id %>
-                          <%= link_to "edit", edit_post_path(t.id) ,class: "btn btn-sm btn-outline-secondary" %>
-                        <%= button_to "delete", post_path(t.id), method: :delete ,data: {confirm: "Do you want to delete it?"},class: "btn btn-sm btn-outline-secondary" %>
-                        <% else %>
-                          <% if current_user.already_liked?(id: t.id, post_id: t.id) %>
-                            <%= button_to post_like_path(id: t.id, post_id: t.id), class: "btn btn-link" , method: :delete do %>
-                              <i class="fa-solid fa-thumbs-up unlike-btn"></i>
-                            <% end %>
+                  <div class="card-body">
+                      <%= link_to(post_path(t.user_id),class:'text-decoration-none text-success') do %>
+                        <div class="card-title ellipsis"><%= t.title %></div>
+                      <% end %>
+                    <div class="d-flex justify-content-between align-items-center card-body-footer">
+                      <div class="btn-group">
+                        <%= link_to "detail", post_path(t.user_id) ,class: "btn btn-sm btn-outline-secondary" %>
+                        <% if user_signed_in? %>
+                          <% if current_user.id == t.user_id %>
                           <% else %>
-                            <%= button_to post_likes_path(id: t.id, post_id: t.id), class: "btn btn-link" ,method: :post do %>
-                              <i class="fa-regular fa-thumbs-up like-btn"></i>
+                            <% if current_user.already_liked?(id: t.id, post_id: t.id) %>
+                              <%= button_to post_like_path(id: t.id, post_id: t.id), class: "btn btn-link" , method: :delete do %>
+                                <i class="fa-solid fa-thumbs-up unlike-btn"></i>
+                              <% end %>
+                            <% else %>
+                              <%= button_to post_likes_path(id: t.id, post_id: t.id), class: "btn btn-link" ,method: :post do %>
+                                <i class="fa-regular fa-thumbs-up like-btn"></i>
+                              <% end %>
                             <% end %>
                           <% end %>
                         <% end %>
+                      </div>
+                      <% if (@now - t.created_at) <= 60 * 60 %>
+                        <small class="text-muted"><%=((@now - t.created_at) / 60).to_i.to_s + "分前" %></small>
+                      <% elsif (@now - t.created_at) <= 60 * 60 * 24 %>
+                        <small class="text-muted"><%=((@now - t.created_at) / 3600).to_i.to_s + "時間前" %></small>
+                      <% elsif (@today - t.created_at.to_date) <= 30 %>
+                        <small class="text-muted"><%= (@today - t.created_at.to_date).to_i.to_s + "日前" %></small>
+                      <% else %>
+                        <small class="text-muted"><%= t.created_at.strftime('%Y-%m-%d') %></small>
                       <% end %>
                     </div>
-                    <% if (@now - t.created_at) <= 60 * 60 %>
-                      <small class="text-muted"><%=((@now - t.created_at) / 60).to_i.to_s + "分前" %></small>
-                    <% elsif (@now - t.created_at) <= 60 * 60 * 24 %>
-                      <small class="text-muted"><%=((@now - t.created_at) / 3600).to_i.to_s + "時間前" %></small>
-                    <% elsif (@today - t.created_at.to_date) <= 30 %>
-                      <small class="text-muted"><%= (@today - t.created_at.to_date).to_i.to_s + "日前" %></small>
-                    <% else %>
-                      <small class="text-muted"><%= t.created_at.strftime('%Y-%m-%d') %></small>
-                    <% end %>
                   </div>
-                </div>
-              </div>
-          <% end %>
+                </div> <!-- card -->
+            <% end %> <!-- each -->
+          </div> <!-- like_card-container -->
+            <form action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSd2HRT4YRlJ8duMlFwbRBtpdzWDr3gYc5erIdq_1DrhqQwTOg/formResponse" method="post" class="vote_form" target="hidden_iframe" onsubmit="submitted=true;">
+              <input type="hidden" name="entry.1498346259" value="<%= current_user.name %>">
+              <% @user.liked_posts.each_with_index do |t, index| %>
+                  <!-- フォーム1 hidden_fieldで得点を入れたい学生の名前を入れる -->
+                  <input type="hidden" name="entry.<%= @entry_name_arr[index] %>" class="like_form select_user" value="<%= t.user.name %>"><br>
+              
+                  <!-- フォーム1 -->
+                <input class="like_form form-control" type="number" step=0.01 name="entry.<%= @entry_arr[index] %>" placeholder="Please enter the score" oninput="updateTotal()" ><br>
+              <% end %>
+              <button class="btn btn-success under-right" type="submit"disabled>送信</button>
+            </form>
+        <% end %>
+      </div>
+      <div class="text-center mt-5 mb-5">いいねをすると得点を入力できます。<br>投票したい作品がない場合は、<br><a href="/" class="text-decoration-none">Topページ</a>でいいねしてください。</div>
+      <div class="latestposts display-5 text-center mt-5 mb-5">スコア確認</div>
+      <div class="text-center mt-5 mb-5 text-danger">投票者を確認の上、<br>右下の送信ボタンを押してください</div>
+      <div class="text-center mt-5 mb-5">
+        <% @user.liked_posts.each_with_index do |t, index| %>
+          <div class="score_entry">
+            <span class="score_entry_name"><%= t.user.name %>:</span>
+            <span class="score_entry_value">--</span>点
+          </div>
         <% end %>
       </div>
     <% end %>
@@ -70,796 +92,60 @@
 
 
   <% if current_user.email.include?('@design.kyushu-u.ac.jp') %>
-      <div class="latestposts display-5 text-center mt-5 mb-5">教員用得点フォーム</div>
-      <div class="vote_container">
-      <form action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSfHlVgDf4SLV5EMOxmUWrLHNRT0-uNn21qv6o6d60OMpyCbaw/formResponse" method="post" target="hidden_iframe" class="vote_form" onsubmit="submitted=true;">
-      <div class="form_scroll">
+  <div id="totalDisplay" class="mt-2">合計: 0/5</div>
+  <div id="scoreDisplay" class="mt-2"></div>
+  <script>
+    let submitted = false;
+  
+    function updateTotal() {
+      let total = 0;
+      const inputElements = document.querySelectorAll('.form-control[type="number"]');
+      inputElements.forEach((inputElement) => {
+        const value = Number(inputElement.value) || 0;
+        total += value;
+      });
+  
+      // 合計を表示するエリアに更新
+      const totalDisplay = document.getElementById('totalDisplay');
+      totalDisplay.textContent = '合計: ' + total.toFixed(2) + '/5.00';
 
-        <input type="hidden" name="entry.1330976122" value=<%= current_user.name %>><br>
-        <select class="form-select" name="entry.744604519">
-          <option value="">学生名1</option>
-          <option value="千田彩奈">千田彩奈</option>
-          <option value="河内拓海">河内拓海</option>
-          <option value="山村真由">山村真由</option>
-          <option value="若松南月">若松南月</option>
-          <option value="井上哲">井上哲</option>
-          <option value="中島夏鈴">中島夏鈴</option>
-          <option value="大塚朋治">大塚朋治</option>
-          <option value="西村優希">西村優希</option>
-          <option value="村越朋香">村越朋香</option>
-          <option value="米田律輝">米田律輝</option>
-          <option value="野崎朱里">野崎朱里</option>
-          <option value="石川泰斗">石川泰斗</option>
-          <option value="重東拓未">重東拓未</option>
-          <option value="横田翔大">横田翔大</option>
-          <option value="角田耕輔">角田耕輔</option>
-          <option value="志賀南海">志賀南海</option>
-          <option value="吉田一輝">吉田一輝</option>
-          <option value="有野賢汰">有野賢汰</option>
-          <option value="大山悠理">大山悠理</option>
-          <option value="服部太洋">服部太洋</option>
-          <option value="都築七海">都築七海</option>
-          <option value="小池愛佳">小池愛佳</option>
-          <option value="松下藍">松下藍</option>
-          <option value="道祖浩満">道祖浩満</option>
-          <option value="米澤真桜">米澤真桜</option>
-          <option value="向山恵介">向山恵介</option>
-          <option value="久保瑞希">久保瑞希</option>
-          <option value="江塚琢眞">江塚琢眞</option>
-          <option value="片山拓人">片山拓人</option>
-          <option value="井福規介">井福規介</option>
-        </select><br>
-        <input class="form-control" type="number" step=0.01 name="entry.711225215" placeholder="得点を記入ください" oninput="updateTotal()">
-        <br><br>
-          <select class="form-select" name="entry.856923514">
-            <option value="">学生名2</option>
-            <option value="千田彩奈">千田彩奈</option>
-            <option value="河内拓海">河内拓海</option>
-            <option value="山村真由">山村真由</option>
-            <option value="若松南月">若松南月</option>
-            <option value="井上哲">井上哲</option>
-            <option value="中島夏鈴">中島夏鈴</option>
-            <option value="大塚朋治">大塚朋治</option>
-            <option value="西村優希">西村優希</option>
-            <option value="村越朋香">村越朋香</option>
-            <option value="米田律輝">米田律輝</option>
-            <option value="野崎朱里">野崎朱里</option>
-            <option value="石川泰斗">石川泰斗</option>
-            <option value="重東拓未">重東拓未</option>
-            <option value="横田翔大">横田翔大</option>
-            <option value="角田耕輔">角田耕輔</option>
-            <option value="志賀南海">志賀南海</option>
-            <option value="吉田一輝">吉田一輝</option>
-            <option value="有野賢汰">有野賢汰</option>
-            <option value="大山悠理">大山悠理</option>
-            <option value="服部太洋">服部太洋</option>
-            <option value="都築七海">都築七海</option>
-            <option value="小池愛佳">小池愛佳</option>
-            <option value="松下藍">松下藍</option>
-            <option value="道祖浩満">道祖浩満</option>
-            <option value="米澤真桜">米澤真桜</option>
-            <option value="向山恵介">向山恵介</option>
-            <option value="久保瑞希">久保瑞希</option>
-            <option value="江塚琢眞">江塚琢眞</option>
-            <option value="片山拓人">片山拓人</option>
-            <option value="井福規介">井福規介</option>
-          </select><br>
-          <input class="form-control" type="number" step=0.01 name="entry.1065568820" placeholder="得点を記入ください" oninput="updateTotal()">
-          <br><br>
-          <select class="form-select" name="entry.1760222056">
-            <option value="">学生名3</option>
-            <option value="千田彩奈">千田彩奈</option>
-            <option value="河内拓海">河内拓海</option>
-            <option value="山村真由">山村真由</option>
-            <option value="若松南月">若松南月</option>
-            <option value="井上哲">井上哲</option>
-            <option value="中島夏鈴">中島夏鈴</option>
-            <option value="大塚朋治">大塚朋治</option>
-            <option value="西村優希">西村優希</option>
-            <option value="村越朋香">村越朋香</option>
-            <option value="米田律輝">米田律輝</option>
-            <option value="野崎朱里">野崎朱里</option>
-            <option value="石川泰斗">石川泰斗</option>
-            <option value="重東拓未">重東拓未</option>
-            <option value="横田翔大">横田翔大</option>
-            <option value="角田耕輔">角田耕輔</option>
-            <option value="志賀南海">志賀南海</option>
-            <option value="吉田一輝">吉田一輝</option>
-            <option value="有野賢汰">有野賢汰</option>
-            <option value="大山悠理">大山悠理</option>
-            <option value="服部太洋">服部太洋</option>
-            <option value="都築七海">都築七海</option>
-            <option value="小池愛佳">小池愛佳</option>
-            <option value="松下藍">松下藍</option>
-            <option value="道祖浩満">道祖浩満</option>
-            <option value="米澤真桜">米澤真桜</option>
-            <option value="向山恵介">向山恵介</option>
-            <option value="久保瑞希">久保瑞希</option>
-            <option value="江塚琢眞">江塚琢眞</option>
-            <option value="片山拓人">片山拓人</option>
-            <option value="井福規介">井福規介</option>
-          </select><br>
-          <input class="form-control" type="number" step=0.01 name="entry.430238776" placeholder="得点を記入ください" oninput="updateTotal()"> 
-          <br><br>
-          <select class="form-select" name="entry.854926385">
-            <option value="">学生名4</option>
-            <option value="千田彩奈">千田彩奈</option>
-            <option value="河内拓海">河内拓海</option>
-            <option value="山村真由">山村真由</option>
-            <option value="若松南月">若松南月</option>
-            <option value="井上哲">井上哲</option>
-            <option value="中島夏鈴">中島夏鈴</option>
-            <option value="大塚朋治">大塚朋治</option>
-            <option value="西村優希">西村優希</option>
-            <option value="村越朋香">村越朋香</option>
-            <option value="米田律輝">米田律輝</option>
-            <option value="野崎朱里">野崎朱里</option>
-            <option value="石川泰斗">石川泰斗</option>
-            <option value="重東拓未">重東拓未</option>
-            <option value="横田翔大">横田翔大</option>
-            <option value="角田耕輔">角田耕輔</option>
-            <option value="志賀南海">志賀南海</option>
-            <option value="吉田一輝">吉田一輝</option>
-            <option value="有野賢汰">有野賢汰</option>
-            <option value="大山悠理">大山悠理</option>
-            <option value="服部太洋">服部太洋</option>
-            <option value="都築七海">都築七海</option>
-            <option value="小池愛佳">小池愛佳</option>
-            <option value="松下藍">松下藍</option>
-            <option value="道祖浩満">道祖浩満</option>
-            <option value="米澤真桜">米澤真桜</option>
-            <option value="向山恵介">向山恵介</option>
-            <option value="久保瑞希">久保瑞希</option>
-            <option value="江塚琢眞">江塚琢眞</option>
-            <option value="片山拓人">片山拓人</option>
-            <option value="井福規介">井福規介</option>
-          </select><br>
-          <input class="form-control" type="number" step=0.01 name="entry.91788364" placeholder="得点を記入ください" oninput="updateTotal()">
-          <br><br>
+      const submitButton = document.querySelector('.btn-success');
+      // total を四捨五入して1になるかどうかを確認
+      if (Math.abs(total - 5) < 0.0005) {
+        submitButton.disabled = false; // 1に四捨五入できれば送信ボタンを有効にする
+      } else {
+        submitButton.disabled = true;
+      }
+    }
+  
+    const scoreEntries = document.querySelectorAll('.score_entry');
 
-          <select class="form-select" name="entry.764589766">
-            <option value="">学生名5</option>
-            <option value="千田彩奈">千田彩奈</option>
-            <option value="河内拓海">河内拓海</option>
-            <option value="山村真由">山村真由</option>
-            <option value="若松南月">若松南月</option>
-            <option value="井上哲">井上哲</option>
-            <option value="中島夏鈴">中島夏鈴</option>
-            <option value="大塚朋治">大塚朋治</option>
-            <option value="西村優希">西村優希</option>
-            <option value="村越朋香">村越朋香</option>
-            <option value="米田律輝">米田律輝</option>
-            <option value="野崎朱里">野崎朱里</option>
-            <option value="石川泰斗">石川泰斗</option>
-            <option value="重東拓未">重東拓未</option>
-            <option value="横田翔大">横田翔大</option>
-            <option value="角田耕輔">角田耕輔</option>
-            <option value="志賀南海">志賀南海</option>
-            <option value="吉田一輝">吉田一輝</option>
-            <option value="有野賢汰">有野賢汰</option>
-            <option value="大山悠理">大山悠理</option>
-            <option value="服部太洋">服部太洋</option>
-            <option value="都築七海">都築七海</option>
-            <option value="小池愛佳">小池愛佳</option>
-            <option value="松下藍">松下藍</option>
-            <option value="道祖浩満">道祖浩満</option>
-            <option value="米澤真桜">米澤真桜</option>
-            <option value="向山恵介">向山恵介</option>
-            <option value="久保瑞希">久保瑞希</option>
-            <option value="江塚琢眞">江塚琢眞</option>
-            <option value="片山拓人">片山拓人</option>
-            <option value="井福規介">井福規介</option>
-          </select><br>
-          <input class="form-control" type="number" step=0.01 name="entry.1859199112" placeholder="得点を記入ください" oninput="updateTotal()">
-          <br><br>
-
-
-          <select class="form-select" name="entry.1263778502">
-            <option value="">学生名6</option>
-            <option value="千田彩奈">千田彩奈</option>
-            <option value="河内拓海">河内拓海</option>
-            <option value="山村真由">山村真由</option>
-            <option value="若松南月">若松南月</option>
-            <option value="井上哲">井上哲</option>
-            <option value="中島夏鈴">中島夏鈴</option>
-            <option value="大塚朋治">大塚朋治</option>
-            <option value="西村優希">西村優希</option>
-            <option value="村越朋香">村越朋香</option>
-            <option value="米田律輝">米田律輝</option>
-            <option value="野崎朱里">野崎朱里</option>
-            <option value="石川泰斗">石川泰斗</option>
-            <option value="重東拓未">重東拓未</option>
-            <option value="横田翔大">横田翔大</option>
-            <option value="角田耕輔">角田耕輔</option>
-            <option value="志賀南海">志賀南海</option>
-            <option value="吉田一輝">吉田一輝</option>
-            <option value="有野賢汰">有野賢汰</option>
-            <option value="大山悠理">大山悠理</option>
-            <option value="服部太洋">服部太洋</option>
-            <option value="都築七海">都築七海</option>
-            <option value="小池愛佳">小池愛佳</option>
-            <option value="松下藍">松下藍</option>
-            <option value="道祖浩満">道祖浩満</option>
-            <option value="米澤真桜">米澤真桜</option>
-            <option value="向山恵介">向山恵介</option>
-            <option value="久保瑞希">久保瑞希</option>
-            <option value="江塚琢眞">江塚琢眞</option>
-            <option value="片山拓人">片山拓人</option>
-            <option value="井福規介">井福規介</option>
-          </select><br>
-          <input class="form-control" type="number" step=0.01 name="entry.1313288151" placeholder="得点を記入ください" oninput="updateTotal()">
-          <br><br>
-
-
-          <select class="form-select" name="entry.1828161890">
-            <option value="">学生名7</option>
-            <option value="千田彩奈">千田彩奈</option>
-            <option value="河内拓海">河内拓海</option>
-            <option value="山村真由">山村真由</option>
-            <option value="若松南月">若松南月</option>
-            <option value="井上哲">井上哲</option>
-            <option value="中島夏鈴">中島夏鈴</option>
-            <option value="大塚朋治">大塚朋治</option>
-            <option value="西村優希">西村優希</option>
-            <option value="村越朋香">村越朋香</option>
-            <option value="米田律輝">米田律輝</option>
-            <option value="野崎朱里">野崎朱里</option>
-            <option value="石川泰斗">石川泰斗</option>
-            <option value="重東拓未">重東拓未</option>
-            <option value="横田翔大">横田翔大</option>
-            <option value="角田耕輔">角田耕輔</option>
-            <option value="志賀南海">志賀南海</option>
-            <option value="吉田一輝">吉田一輝</option>
-            <option value="有野賢汰">有野賢汰</option>
-            <option value="大山悠理">大山悠理</option>
-            <option value="服部太洋">服部太洋</option>
-            <option value="都築七海">都築七海</option>
-            <option value="小池愛佳">小池愛佳</option>
-            <option value="松下藍">松下藍</option>
-            <option value="道祖浩満">道祖浩満</option>
-            <option value="米澤真桜">米澤真桜</option>
-            <option value="向山恵介">向山恵介</option>
-            <option value="久保瑞希">久保瑞希</option>
-            <option value="江塚琢眞">江塚琢眞</option>
-            <option value="片山拓人">片山拓人</option>
-            <option value="井福規介">井福規介</option>
-          </select><br>
-          <input class="form-control" type="number" step=0.01 name="entry.1947818766" placeholder="得点を記入ください" oninput="updateTotal()">
-          <br><br>
-
-
-          <select class="form-select" name="entry.1258595418">
-            <option value="">学生名8</option>
-            <option value="千田彩奈">千田彩奈</option>
-            <option value="河内拓海">河内拓海</option>
-            <option value="山村真由">山村真由</option>
-            <option value="若松南月">若松南月</option>
-            <option value="井上哲">井上哲</option>
-            <option value="中島夏鈴">中島夏鈴</option>
-            <option value="大塚朋治">大塚朋治</option>
-            <option value="西村優希">西村優希</option>
-            <option value="村越朋香">村越朋香</option>
-            <option value="米田律輝">米田律輝</option>
-            <option value="野崎朱里">野崎朱里</option>
-            <option value="石川泰斗">石川泰斗</option>
-            <option value="重東拓未">重東拓未</option>
-            <option value="横田翔大">横田翔大</option>
-            <option value="角田耕輔">角田耕輔</option>
-            <option value="志賀南海">志賀南海</option>
-            <option value="吉田一輝">吉田一輝</option>
-            <option value="有野賢汰">有野賢汰</option>
-            <option value="大山悠理">大山悠理</option>
-            <option value="服部太洋">服部太洋</option>
-            <option value="都築七海">都築七海</option>
-            <option value="小池愛佳">小池愛佳</option>
-            <option value="松下藍">松下藍</option>
-            <option value="道祖浩満">道祖浩満</option>
-            <option value="米澤真桜">米澤真桜</option>
-            <option value="向山恵介">向山恵介</option>
-            <option value="久保瑞希">久保瑞希</option>
-            <option value="江塚琢眞">江塚琢眞</option>
-            <option value="片山拓人">片山拓人</option>
-            <option value="井福規介">井福規介</option>
-          </select><br>
-          <input class="form-control" type="number" step=0.01 name="entry.1706571358" placeholder="得点を記入ください" oninput="updateTotal()">
-          <br><br>
-
-
-          <select class="form-select" name="entry.1947200523">
-            <option value="">学生名9</option>
-            <option value="千田彩奈">千田彩奈</option>
-            <option value="河内拓海">河内拓海</option>
-            <option value="山村真由">山村真由</option>
-            <option value="若松南月">若松南月</option>
-            <option value="井上哲">井上哲</option>
-            <option value="中島夏鈴">中島夏鈴</option>
-            <option value="大塚朋治">大塚朋治</option>
-            <option value="西村優希">西村優希</option>
-            <option value="村越朋香">村越朋香</option>
-            <option value="米田律輝">米田律輝</option>
-            <option value="野崎朱里">野崎朱里</option>
-            <option value="石川泰斗">石川泰斗</option>
-            <option value="重東拓未">重東拓未</option>
-            <option value="横田翔大">横田翔大</option>
-            <option value="角田耕輔">角田耕輔</option>
-            <option value="志賀南海">志賀南海</option>
-            <option value="吉田一輝">吉田一輝</option>
-            <option value="有野賢汰">有野賢汰</option>
-            <option value="大山悠理">大山悠理</option>
-            <option value="服部太洋">服部太洋</option>
-            <option value="都築七海">都築七海</option>
-            <option value="小池愛佳">小池愛佳</option>
-            <option value="松下藍">松下藍</option>
-            <option value="道祖浩満">道祖浩満</option>
-            <option value="米澤真桜">米澤真桜</option>
-            <option value="向山恵介">向山恵介</option>
-            <option value="久保瑞希">久保瑞希</option>
-            <option value="江塚琢眞">江塚琢眞</option>
-            <option value="片山拓人">片山拓人</option>
-            <option value="井福規介">井福規介</option>
-          </select><br>
-          <input class="form-control" type="number" step=0.01 name="entry.2105605964" placeholder="得点を記入ください" oninput="updateTotal()">
-          <br><br>
-
-
-          <select class="form-select" name="entry.1272286497">
-            <option value="">学生名10</option>
-            <option value="千田彩奈">千田彩奈</option>
-            <option value="河内拓海">河内拓海</option>
-            <option value="山村真由">山村真由</option>
-            <option value="若松南月">若松南月</option>
-            <option value="井上哲">井上哲</option>
-            <option value="中島夏鈴">中島夏鈴</option>
-            <option value="大塚朋治">大塚朋治</option>
-            <option value="西村優希">西村優希</option>
-            <option value="村越朋香">村越朋香</option>
-            <option value="米田律輝">米田律輝</option>
-            <option value="野崎朱里">野崎朱里</option>
-            <option value="石川泰斗">石川泰斗</option>
-            <option value="重東拓未">重東拓未</option>
-            <option value="横田翔大">横田翔大</option>
-            <option value="角田耕輔">角田耕輔</option>
-            <option value="志賀南海">志賀南海</option>
-            <option value="吉田一輝">吉田一輝</option>
-            <option value="有野賢汰">有野賢汰</option>
-            <option value="大山悠理">大山悠理</option>
-            <option value="服部太洋">服部太洋</option>
-            <option value="都築七海">都築七海</option>
-            <option value="小池愛佳">小池愛佳</option>
-            <option value="松下藍">松下藍</option>
-            <option value="道祖浩満">道祖浩満</option>
-            <option value="米澤真桜">米澤真桜</option>
-            <option value="向山恵介">向山恵介</option>
-            <option value="久保瑞希">久保瑞希</option>
-            <option value="江塚琢眞">江塚琢眞</option>
-            <option value="片山拓人">片山拓人</option>
-            <option value="井福規介">井福規介</option>
-          </select><br>
-          <input class="form-control" type="number" step=0.01 name="entry.586005471" placeholder="得点を記入ください" oninput="updateTotal()">
-          <br><br>
-
-
-        <button class="btn btn-success under-right" type="submit"disabled>送信</button>
-        </div>
-        </form>
-      </div>
-        <div id="totalDisplay" class="mt-2">合計: 0/5.00</div>
-
-        <script>
-          let submitted = false;
-        
-          function updateTotal() {
-            let total = 0;
-            const inputElements = document.querySelectorAll('.form-control[type="number"]');
-            inputElements.forEach((inputElement) => {
-              const value = Number(inputElement.value) || 0;
-              total += value;
-            });
-        
-            // 合計を表示するエリアに更新
-            const totalDisplay = document.getElementById('totalDisplay');
-            totalDisplay.textContent = '合計: ' + total.toFixed(2) + '/5';
-        
-            const submitButton = document.querySelector('.btn-success');
-            // total を四捨五入して1になるかどうかを確認
-            if (Math.abs(total - 5) < 0.0005) {
-              submitButton.disabled = false; // 1に四捨五入できれば送信ボタンを有効にする
-            } else {
-              submitButton.disabled = true;
-            }
-          }
-        
-          document.addEventListener('input', function (event) {
-            const targetElement = event.target;
-            if (targetElement.classList.contains('form-control') && targetElement.type === 'number') {
-              updateTotal();
-            }
-          });
-        
-          const page_transition = function () {
-            if (submitted) {
-              window.location.href = '<%= thanks_path %>';
-            }
-          }
-        </script>  
-        <iframe name="hidden_iframe" style="display:none;" onload="page_transition()"></iframe>
-    <% else %>
-
-
-    <div class="vote_container">
-    <div class="latestposts display-5 text-center mt-5 mb-5">学生用得点フォーム</div>
-    <form action="https://docs.google.com/forms/u/0/d/e/1FAIpQLScV1xsHKPTy-Z-CvNXC1d-YXK923_2paBT_1Jysk5kAbsI6sQ/formResponse" method="post" class="vote_form" target="hidden_iframe" onsubmit="submitted=true;">
-    
-    <div class="form_scroll">
-      <input type="hidden" name="entry.1330976122" value=<%= current_user.name %>><br>
-
-      <select class="form-select" name="entry.744604519">
-        <option value="">学生名1</option>
-        <option value="千田彩奈">千田彩奈</option>
-        <option value="河内拓海">河内拓海</option>
-        <option value="山村真由">山村真由</option>
-        <option value="若松南月">若松南月</option>
-        <option value="井上哲">井上哲</option>
-        <option value="中島夏鈴">中島夏鈴</option>
-        <option value="大塚朋治">大塚朋治</option>
-        <option value="西村優希">西村優希</option>
-        <option value="村越朋香">村越朋香</option>
-        <option value="米田律輝">米田律輝</option>
-        <option value="野崎朱里">野崎朱里</option>
-        <option value="石川泰斗">石川泰斗</option>
-        <option value="重東拓未">重東拓未</option>
-        <option value="横田翔大">横田翔大</option>
-        <option value="角田耕輔">角田耕輔</option>
-        <option value="志賀南海">志賀南海</option>
-        <option value="吉田一輝">吉田一輝</option>
-        <option value="有野賢汰">有野賢汰</option>
-        <option value="大山悠理">大山悠理</option>
-        <option value="服部太洋">服部太洋</option>
-        <option value="都築七海">都築七海</option>
-        <option value="小池愛佳">小池愛佳</option>
-        <option value="松下藍">松下藍</option>
-        <option value="道祖浩満">道祖浩満</option>
-        <option value="米澤真桜">米澤真桜</option>
-        <option value="向山恵介">向山恵介</option>
-        <option value="久保瑞希">久保瑞希</option>
-        <option value="江塚琢眞">江塚琢眞</option>
-        <option value="片山拓人">片山拓人</option>
-        <option value="井福規介">井福規介</option>
-      </select><br>
-      <input class="form-control" type="number" step=0.01 name="entry.398891885" placeholder="得点を記入ください" oninput="updateTotal()"> 
-      <br><br>
-
-      <select class="form-select" name="entry.343085168">
-        <option value="">学生名2</option>
-        <option value="千田彩奈">千田彩奈</option>
-        <option value="河内拓海">河内拓海</option>
-        <option value="山村真由">山村真由</option>
-        <option value="若松南月">若松南月</option>
-        <option value="井上哲">井上哲</option>
-        <option value="中島夏鈴">中島夏鈴</option>
-        <option value="大塚朋治">大塚朋治</option>
-        <option value="西村優希">西村優希</option>
-        <option value="村越朋香">村越朋香</option>
-        <option value="米田律輝">米田律輝</option>
-        <option value="野崎朱里">野崎朱里</option>
-        <option value="石川泰斗">石川泰斗</option>
-        <option value="重東拓未">重東拓未</option>
-        <option value="横田翔大">横田翔大</option>
-        <option value="角田耕輔">角田耕輔</option>
-        <option value="志賀南海">志賀南海</option>
-        <option value="吉田一輝">吉田一輝</option>
-        <option value="有野賢汰">有野賢汰</option>
-        <option value="大山悠理">大山悠理</option>
-        <option value="服部太洋">服部太洋</option>
-        <option value="都築七海">都築七海</option>
-        <option value="小池愛佳">小池愛佳</option>
-        <option value="松下藍">松下藍</option>
-        <option value="道祖浩満">道祖浩満</option>
-        <option value="米澤真桜">米澤真桜</option>
-        <option value="向山恵介">向山恵介</option>
-        <option value="久保瑞希">久保瑞希</option>
-        <option value="江塚琢眞">江塚琢眞</option>
-        <option value="片山拓人">片山拓人</option>
-        <option value="井福規介">井福規介</option>
-      </select><br>
-      <input class="form-control" type="number" step=0.01 name="entry.1938007969" placeholder="得点を記入ください" oninput="updateTotal()"> 
-      <br><br>
-
-      <select class="form-select" name="entry.1775128029">
-        <option value="">学生名3</option>
-        <option value="千田彩奈">千田彩奈</option>
-        <option value="河内拓海">河内拓海</option>
-        <option value="山村真由">山村真由</option>
-        <option value="若松南月">若松南月</option>
-        <option value="井上哲">井上哲</option>
-        <option value="中島夏鈴">中島夏鈴</option>
-        <option value="大塚朋治">大塚朋治</option>
-        <option value="西村優希">西村優希</option>
-        <option value="村越朋香">村越朋香</option>
-        <option value="米田律輝">米田律輝</option>
-        <option value="野崎朱里">野崎朱里</option>
-        <option value="石川泰斗">石川泰斗</option>
-        <option value="重東拓未">重東拓未</option>
-        <option value="横田翔大">横田翔大</option>
-        <option value="角田耕輔">角田耕輔</option>
-        <option value="志賀南海">志賀南海</option>
-        <option value="吉田一輝">吉田一輝</option>
-        <option value="有野賢汰">有野賢汰</option>
-        <option value="大山悠理">大山悠理</option>
-        <option value="服部太洋">服部太洋</option>
-        <option value="都築七海">都築七海</option>
-        <option value="小池愛佳">小池愛佳</option>
-        <option value="松下藍">松下藍</option>
-        <option value="道祖浩満">道祖浩満</option>
-        <option value="米澤真桜">米澤真桜</option>
-        <option value="向山恵介">向山恵介</option>
-        <option value="久保瑞希">久保瑞希</option>
-        <option value="江塚琢眞">江塚琢眞</option>
-        <option value="片山拓人">片山拓人</option>
-        <option value="井福規介">井福規介</option>
-      </select><br>
-      <input class="form-control" type="number" step=0.01 name="entry.413728871" placeholder="得点を記入ください" oninput="updateTotal()"> 
-      <br><br>
-
-      <select class="form-select" name="entry.488179116">
-        <option value="">学生名4</option>
-        <option value="千田彩奈">千田彩奈</option>
-        <option value="河内拓海">河内拓海</option>
-        <option value="山村真由">山村真由</option>
-        <option value="若松南月">若松南月</option>
-        <option value="井上哲">井上哲</option>
-        <option value="中島夏鈴">中島夏鈴</option>
-        <option value="大塚朋治">大塚朋治</option>
-        <option value="西村優希">西村優希</option>
-        <option value="村越朋香">村越朋香</option>
-        <option value="米田律輝">米田律輝</option>
-        <option value="野崎朱里">野崎朱里</option>
-        <option value="石川泰斗">石川泰斗</option>
-        <option value="重東拓未">重東拓未</option>
-        <option value="横田翔大">横田翔大</option>
-        <option value="角田耕輔">角田耕輔</option>
-        <option value="志賀南海">志賀南海</option>
-        <option value="吉田一輝">吉田一輝</option>
-        <option value="有野賢汰">有野賢汰</option>
-        <option value="大山悠理">大山悠理</option>
-        <option value="服部太洋">服部太洋</option>
-        <option value="都築七海">都築七海</option>
-        <option value="小池愛佳">小池愛佳</option>
-        <option value="松下藍">松下藍</option>
-        <option value="道祖浩満">道祖浩満</option>
-        <option value="米澤真桜">米澤真桜</option>
-        <option value="向山恵介">向山恵介</option>
-        <option value="久保瑞希">久保瑞希</option>
-        <option value="江塚琢眞">江塚琢眞</option>
-        <option value="片山拓人">片山拓人</option>
-        <option value="井福規介">井福規介</option>
-      </select><br>
-      <input class="form-control" type="number" step=0.01 name="entry.1446802555" placeholder="得点を記入ください" oninput="updateTotal()"> 
-      <br><br>
-
-      <select class="form-select" name="entry.854012110">
-        <option value="">学生名5</option>
-        <option value="千田彩奈">千田彩奈</option>
-        <option value="河内拓海">河内拓海</option>
-        <option value="山村真由">山村真由</option>
-        <option value="若松南月">若松南月</option>
-        <option value="井上哲">井上哲</option>
-        <option value="中島夏鈴">中島夏鈴</option>
-        <option value="大塚朋治">大塚朋治</option>
-        <option value="西村優希">西村優希</option>
-        <option value="村越朋香">村越朋香</option>
-        <option value="米田律輝">米田律輝</option>
-        <option value="野崎朱里">野崎朱里</option>
-        <option value="石川泰斗">石川泰斗</option>
-        <option value="重東拓未">重東拓未</option>
-        <option value="横田翔大">横田翔大</option>
-        <option value="角田耕輔">角田耕輔</option>
-        <option value="志賀南海">志賀南海</option>
-        <option value="吉田一輝">吉田一輝</option>
-        <option value="有野賢汰">有野賢汰</option>
-        <option value="大山悠理">大山悠理</option>
-        <option value="服部太洋">服部太洋</option>
-        <option value="都築七海">都築七海</option>
-        <option value="小池愛佳">小池愛佳</option>
-        <option value="松下藍">松下藍</option>
-        <option value="道祖浩満">道祖浩満</option>
-        <option value="米澤真桜">米澤真桜</option>
-        <option value="向山恵介">向山恵介</option>
-        <option value="久保瑞希">久保瑞希</option>
-        <option value="江塚琢眞">江塚琢眞</option>
-        <option value="片山拓人">片山拓人</option>
-        <option value="井福規介">井福規介</option>
-      </select><br>
-      <input class="form-control" type="number" step=0.01 name="entry.1102523422" placeholder="得点を記入ください" oninput="updateTotal()"> 
-      <br><br>
-
-      <select class="form-select" name="entry.784325605">
-        <option value="">学生名6</option>
-        <option value="千田彩奈">千田彩奈</option>
-        <option value="河内拓海">河内拓海</option>
-        <option value="山村真由">山村真由</option>
-        <option value="若松南月">若松南月</option>
-        <option value="井上哲">井上哲</option>
-        <option value="中島夏鈴">中島夏鈴</option>
-        <option value="大塚朋治">大塚朋治</option>
-        <option value="西村優希">西村優希</option>
-        <option value="村越朋香">村越朋香</option>
-        <option value="米田律輝">米田律輝</option>
-        <option value="野崎朱里">野崎朱里</option>
-        <option value="石川泰斗">石川泰斗</option>
-        <option value="重東拓未">重東拓未</option>
-        <option value="横田翔大">横田翔大</option>
-        <option value="角田耕輔">角田耕輔</option>
-        <option value="志賀南海">志賀南海</option>
-        <option value="吉田一輝">吉田一輝</option>
-        <option value="有野賢汰">有野賢汰</option>
-        <option value="大山悠理">大山悠理</option>
-        <option value="服部太洋">服部太洋</option>
-        <option value="都築七海">都築七海</option>
-        <option value="小池愛佳">小池愛佳</option>
-        <option value="松下藍">松下藍</option>
-        <option value="道祖浩満">道祖浩満</option>
-        <option value="米澤真桜">米澤真桜</option>
-        <option value="向山恵介">向山恵介</option>
-        <option value="久保瑞希">久保瑞希</option>
-        <option value="江塚琢眞">江塚琢眞</option>
-        <option value="片山拓人">片山拓人</option>
-        <option value="井福規介">井福規介</option>
-      </select><br>
-      <input class="form-control" type="number" step=0.01 name="entry.335959261" placeholder="得点を記入ください" oninput="updateTotal()"> 
-      <br><br>
-
-      <select class="form-select" name="entry.1911361429">
-        <option value="">学生名7</option>
-        <option value="千田彩奈">千田彩奈</option>
-        <option value="河内拓海">河内拓海</option>
-        <option value="山村真由">山村真由</option>
-        <option value="若松南月">若松南月</option>
-        <option value="井上哲">井上哲</option>
-        <option value="中島夏鈴">中島夏鈴</option>
-        <option value="大塚朋治">大塚朋治</option>
-        <option value="西村優希">西村優希</option>
-        <option value="村越朋香">村越朋香</option>
-        <option value="米田律輝">米田律輝</option>
-        <option value="野崎朱里">野崎朱里</option>
-        <option value="石川泰斗">石川泰斗</option>
-        <option value="重東拓未">重東拓未</option>
-        <option value="横田翔大">横田翔大</option>
-        <option value="角田耕輔">角田耕輔</option>
-        <option value="志賀南海">志賀南海</option>
-        <option value="吉田一輝">吉田一輝</option>
-        <option value="有野賢汰">有野賢汰</option>
-        <option value="大山悠理">大山悠理</option>
-        <option value="服部太洋">服部太洋</option>
-        <option value="都築七海">都築七海</option>
-        <option value="小池愛佳">小池愛佳</option>
-        <option value="松下藍">松下藍</option>
-        <option value="道祖浩満">道祖浩満</option>
-        <option value="米澤真桜">米澤真桜</option>
-        <option value="向山恵介">向山恵介</option>
-        <option value="久保瑞希">久保瑞希</option>
-        <option value="江塚琢眞">江塚琢眞</option>
-        <option value="片山拓人">片山拓人</option>
-        <option value="井福規介">井福規介</option>
-      </select><br>
-      <input class="form-control" type="number" step=0.01 name="entry.162357247" placeholder="得点を記入ください" oninput="updateTotal()"> 
-      <br><br>
-
-      <select class="form-select" name="entry.817735332">
-        <option value="">学生名8</option>
-        <option value="千田彩奈">千田彩奈</option>
-        <option value="河内拓海">河内拓海</option>
-        <option value="山村真由">山村真由</option>
-        <option value="若松南月">若松南月</option>
-        <option value="井上哲">井上哲</option>
-        <option value="中島夏鈴">中島夏鈴</option>
-        <option value="大塚朋治">大塚朋治</option>
-        <option value="西村優希">西村優希</option>
-        <option value="村越朋香">村越朋香</option>
-        <option value="米田律輝">米田律輝</option>
-        <option value="野崎朱里">野崎朱里</option>
-        <option value="石川泰斗">石川泰斗</option>
-        <option value="重東拓未">重東拓未</option>
-        <option value="横田翔大">横田翔大</option>
-        <option value="角田耕輔">角田耕輔</option>
-        <option value="志賀南海">志賀南海</option>
-        <option value="吉田一輝">吉田一輝</option>
-        <option value="有野賢汰">有野賢汰</option>
-        <option value="大山悠理">大山悠理</option>
-        <option value="服部太洋">服部太洋</option>
-        <option value="都築七海">都築七海</option>
-        <option value="小池愛佳">小池愛佳</option>
-        <option value="松下藍">松下藍</option>
-        <option value="道祖浩満">道祖浩満</option>
-        <option value="米澤真桜">米澤真桜</option>
-        <option value="向山恵介">向山恵介</option>
-        <option value="久保瑞希">久保瑞希</option>
-        <option value="江塚琢眞">江塚琢眞</option>
-        <option value="片山拓人">片山拓人</option>
-        <option value="井福規介">井福規介</option>
-      </select><br>
-      <input class="form-control" type="number" step=0.01 name="entry.60711408" placeholder="得点を記入ください" oninput="updateTotal()"> 
-      <br><br>
-
-      <select class="form-select" name="entry.2032107963">
-        <option value="">学生名9</option>
-        <option value="千田彩奈">千田彩奈</option>
-        <option value="河内拓海">河内拓海</option>
-        <option value="山村真由">山村真由</option>
-        <option value="若松南月">若松南月</option>
-        <option value="井上哲">井上哲</option>
-        <option value="中島夏鈴">中島夏鈴</option>
-        <option value="大塚朋治">大塚朋治</option>
-        <option value="西村優希">西村優希</option>
-        <option value="村越朋香">村越朋香</option>
-        <option value="米田律輝">米田律輝</option>
-        <option value="野崎朱里">野崎朱里</option>
-        <option value="石川泰斗">石川泰斗</option>
-        <option value="重東拓未">重東拓未</option>
-        <option value="横田翔大">横田翔大</option>
-        <option value="角田耕輔">角田耕輔</option>
-        <option value="志賀南海">志賀南海</option>
-        <option value="吉田一輝">吉田一輝</option>
-        <option value="有野賢汰">有野賢汰</option>
-        <option value="大山悠理">大山悠理</option>
-        <option value="服部太洋">服部太洋</option>
-        <option value="都築七海">都築七海</option>
-        <option value="小池愛佳">小池愛佳</option>
-        <option value="松下藍">松下藍</option>
-        <option value="道祖浩満">道祖浩満</option>
-        <option value="米澤真桜">米澤真桜</option>
-        <option value="向山恵介">向山恵介</option>
-        <option value="久保瑞希">久保瑞希</option>
-        <option value="江塚琢眞">江塚琢眞</option>
-        <option value="片山拓人">片山拓人</option>
-        <option value="井福規介">井福規介</option>
-      </select><br>
-      <input class="form-control" type="number" step=0.01 name="entry.1997500160" placeholder="得点を記入ください" oninput="updateTotal()"> 
-      <br><br>
-
-      <select class="form-select" name="entry.1288170082">
-        <option value="">学生名10</option>
-        <option value="千田彩奈">千田彩奈</option>
-        <option value="河内拓海">河内拓海</option>
-        <option value="山村真由">山村真由</option>
-        <option value="若松南月">若松南月</option>
-        <option value="井上哲">井上哲</option>
-        <option value="中島夏鈴">中島夏鈴</option>
-        <option value="大塚朋治">大塚朋治</option>
-        <option value="西村優希">西村優希</option>
-        <option value="村越朋香">村越朋香</option>
-        <option value="米田律輝">米田律輝</option>
-        <option value="野崎朱里">野崎朱里</option>
-        <option value="石川泰斗">石川泰斗</option>
-        <option value="重東拓未">重東拓未</option>
-        <option value="横田翔大">横田翔大</option>
-        <option value="角田耕輔">角田耕輔</option>
-        <option value="志賀南海">志賀南海</option>
-        <option value="吉田一輝">吉田一輝</option>
-        <option value="有野賢汰">有野賢汰</option>
-        <option value="大山悠理">大山悠理</option>
-        <option value="服部太洋">服部太洋</option>
-        <option value="都築七海">都築七海</option>
-        <option value="小池愛佳">小池愛佳</option>
-        <option value="松下藍">松下藍</option>
-        <option value="道祖浩満">道祖浩満</option>
-        <option value="米澤真桜">米澤真桜</option>
-        <option value="向山恵介">向山恵介</option>
-        <option value="久保瑞希">久保瑞希</option>
-        <option value="江塚琢眞">江塚琢眞</option>
-        <option value="片山拓人">片山拓人</option>
-        <option value="井福規介">井福規介</option>
-      </select><br>
-
-      <input class="form-control" type="number" step=0.01 name="entry.1017099518" placeholder="得点を記入ください" oninput="updateTotal()"> 
-      <br><br>
-
-      <button class="btn btn-success under-right" type="submit"disabled>送信</button>
-      </div>
-      </form>
-      </div>
-        <div id="totalDisplay" class="mt-2">合計: 0/1</div>
-        <script>
+    function updateScoreEntries() {
+      const inputElements = document.querySelectorAll('.like_form[type="number"]');
+      inputElements.forEach((inputElement, index) => {
+        const value = inputElement.value || 0;
+        scoreEntries[index].querySelector('.score_entry_value').textContent = value;
+      });
+    }
+  
+    document.addEventListener('input', function(event) {
+      const targetElement = event.target;
+      if (targetElement.classList.contains('like_form') && targetElement.type === 'number') {
+        updateScoreEntries();
+      }
+    });
+  
+    const page_transition = function () {
+      if (submitted) {
+        window.location.href = '<%= thanks_path %>';
+      }
+    }
+  </script>  
+  <iframe name="hidden_iframe" style="display:none;" onload="page_transition()"></iframe>
+  <% elsif current_user.email.include?('@s.kyushu-u.ac.jp') %>
+      <div id="totalDisplay" class="mt-2">合計: 0/1</div>
+      <div id="scoreDisplay" class="mt-2"></div>
+      <script>
         let submitted = false;
       
         function updateTotal() {
@@ -873,7 +159,7 @@
           // 合計を表示するエリアに更新
           const totalDisplay = document.getElementById('totalDisplay');
           totalDisplay.textContent = '合計: ' + total.toFixed(2) + '/1.00';
-      
+
           const submitButton = document.querySelector('.btn-success');
           // total を四捨五入して1になるかどうかを確認
           if (Math.abs(total - 1) < 0.0005) {
@@ -883,10 +169,20 @@
           }
         }
       
-        document.addEventListener('input', function (event) {
+        const scoreEntries = document.querySelectorAll('.score_entry');
+
+        function updateScoreEntries() {
+          const inputElements = document.querySelectorAll('.like_form[type="number"]');
+          inputElements.forEach((inputElement, index) => {
+            const value = inputElement.value || 0;
+            scoreEntries[index].querySelector('.score_entry_value').textContent = value;
+          });
+        }
+      
+        document.addEventListener('input', function(event) {
           const targetElement = event.target;
-          if (targetElement.classList.contains('form-control') && targetElement.type === 'number') {
-            updateTotal();
+          if (targetElement.classList.contains('like_form') && targetElement.type === 'number') {
+            updateScoreEntries();
           }
         });
       
@@ -896,6 +192,57 @@
           }
         }
       </script>  
-    <iframe name="hidden_iframe" style="display:none;" onload="page_transition()"></iframe>
+      <iframe name="hidden_iframe" style="display:none;" onload="page_transition()"></iframe>
+  <% else %>
+  <div id="totalDisplay" class="mt-2">合計: 0/3</div>
+  <div id="scoreDisplay" class="mt-2"></div>
+  <script>
+    let submitted = false;
+  
+    function updateTotal() {
+      let total = 0;
+      const inputElements = document.querySelectorAll('.form-control[type="number"]');
+      inputElements.forEach((inputElement) => {
+        const value = Number(inputElement.value) || 0;
+        total += value;
+      });
+  
+      // 合計を表示するエリアに更新
+      const totalDisplay = document.getElementById('totalDisplay');
+      totalDisplay.textContent = '合計: ' + total.toFixed(2) + '/3.00';
+
+      const submitButton = document.querySelector('.btn-success');
+      // total を四捨五入して1になるかどうかを確認
+      if (Math.abs(total - 3) < 0.0005) {
+        submitButton.disabled = false; // 1に四捨五入できれば送信ボタンを有効にする
+      } else {
+        submitButton.disabled = true;
+      }
+    }
+  
+    const scoreEntries = document.querySelectorAll('.score_entry');
+
+    function updateScoreEntries() {
+      const inputElements = document.querySelectorAll('.like_form[type="number"]');
+      inputElements.forEach((inputElement, index) => {
+        const value = inputElement.value || 0;
+        scoreEntries[index].querySelector('.score_entry_value').textContent = value;
+      });
+    }
+  
+    document.addEventListener('input', function(event) {
+      const targetElement = event.target;
+      if (targetElement.classList.contains('like_form') && targetElement.type === 'number') {
+        updateScoreEntries();
+      }
+    });
+  
+    const page_transition = function () {
+      if (submitted) {
+        window.location.href = '<%= thanks_path %>';
+      }
+    }
+  </script>  
+  <iframe name="hidden_iframe" style="display:none;" onload="page_transition()"></iframe>   
   <% end %>
 </div>
