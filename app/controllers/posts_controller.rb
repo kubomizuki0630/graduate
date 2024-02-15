@@ -53,8 +53,9 @@ class PostsController < ApplicationController
     @today = Date.today
     @now = Time.now
     @post = Post.find_by(user_id:params[:user_id])
-    @comments = @post.comments
+    @comments = @post.comments.where.not(user_id:params[:user_id])
     @comment = Comment.new
+    @summary = @post.comments.where(user_id:params[:user_id])
     # render layout:'no_container' 
   end
   

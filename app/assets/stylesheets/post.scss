@@ -279,6 +279,7 @@ div.card.like_card{
   display: flex;
   justify-content: center; /* 横方向（左右）中央揃え */
   align-items: center; /* 縦方向（上下）中央揃え */
+  min-height: 200px;
 }
 
 .likecard-form{
@@ -397,13 +398,51 @@ div.card.like_card{
 
 .vote-link{
   width: 100%;
-  margin-top: 2%;
+  margin-top: 100px;
+  margin-bottom: 100px;
 }
 
 .vote-btn{
   background-color: green;
-  padding: 10px;
+  padding: 15px;
   text-decoration: none;
   color: white;
   border-radius: 3px;
+}
+
+.gallery-container{
+  width: 100%;
+  margin-top: 40px;
+}
+
+.gallery-name{
+  width: 100%;
+  border: 1px solid black;
+  margin-bottom: 15px;
+}
+
+.gallery-space{
+  width: 100%;
+  border: 1px solid black;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 50px;
+}
+
+.room-container{
+margin-top: 15px;
+display: flex;
+justify-content: space-around;
+flex-wrap: wrap;
+}
+
+.room-space{
+  width: 40%;
+  border: 1px solid black;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100px;
+  margin-bottom: 10px;
 }
