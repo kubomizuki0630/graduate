@@ -1,6 +1,106 @@
 <div class="top-image"></div>
 <div class="latestposts display-5 text-center mt-5 mb-5">Place</div>
-<div class="gallery-container text-center">
+<% if user_signed_in? %>
+  <% if current_user.email.include?('@design.kyushu-u.ac.jp') || current_user.email.include?('@s.kyushu-u.ac.jp')  %>
+    <div class="gallery-container text-center">
+      <div class="gallery-name">ギャラリー</div>
+      <div class="gallery-space">
+        <div><a href="/posts/user_id/31" class="<%=  @liked_posters_user_id.include?(31) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">有野</a></div>
+        <div><a href="/posts/user_id/18" class="<%=  @liked_posters_user_id.include?(18) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">井上</a></div>
+        <div><a href="/posts/user_id/36" class="<%=  @liked_posters_user_id.include?(36) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">松下</a></div>
+        <div><a href="/posts/user_id/23" class="<%=  @liked_posters_user_id.include?(23) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">米田</a></div>
+      </div>
+      </div>
+    <div class="room-container">
+      <div class="room-space">
+        <a href="/posts/user_id/30" class="<%=  @liked_posters_user_id.include?(30) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">吉田</a>
+        <a href="/posts/user_id/33" class="<%=  @liked_posters_user_id.include?(33) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">服部</a>
+        <a href="/posts/user_id/29" class="<%=  @liked_posters_user_id.include?(29) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">志賀</a>
+        <a href="/posts/user_id/25" class="<%=  @liked_posters_user_id.include?(25) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">石川</a>
+        <a href="/posts/user_id/37" class="<%=  @liked_posters_user_id.include?(37) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">道祖</a>
+      </div>
+
+      <div class="room-space">
+        <a href="/posts/user_id/38" class="<%=  @liked_posters_user_id.include?(38) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">米澤</a>
+        <a href="/posts/user_id/26" class="<%=  @liked_posters_user_id.include?(26) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">重東</a>
+        <a href="/posts/user_id/41" class="<%= @liked_posters_user_id.include?(41) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">江塚</a>
+        <a href="/posts/user_id/39" class="<%= @liked_posters_user_id.include?(39) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">向山</a>
+        <a href="/posts/user_id/17" class="<%=  @liked_posters_user_id.include?(17) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">若松</a>
+      </div>
+
+      <div class="room-space">
+        <div><a href="/posts/user_id/15" class="<%=  @liked_posters_user_id.include?(15) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">河内</a><br><a href="/posts/user_id/40" class="<%= @liked_posters_user_id.include?(40) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">久保</a></div>
+        <div><a href="/posts/user_id/43" class="<%= @liked_posters_user_id.include?(43) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">井福</a><br><a href="/posts/user_id/21" class="<%=  @liked_posters_user_id.include?(21) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">西村</a></div>
+        <div><a href="/posts/user_id/34" class="<%=  @liked_posters_user_id.include?(34) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">都築</a><br><a href="/posts/user_id/24" class="<%=  @liked_posters_user_id.include?(24) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">野崎</a></div>
+        <div><a href="/posts/user_id/14" class="<%=  @liked_posters_user_id.include?(14) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">千田</a><br><a href="/posts/user_id/28" class="<%=  @liked_posters_user_id.include?(28) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">角田</a></div>
+      </div>
+      <div class="room-space">
+      <div><a href="/posts/user_id/20" class="<%=  @liked_posters_user_id.include?(20) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">大塚</a><br><a href="/posts/user_id/19" class="<%=  @liked_posters_user_id.include?(19) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">中島</a></div>
+      <div><a href="/posts/user_id/35" class="<%=  @liked_posters_user_id.include?(35) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">小池</a><br><a href="/posts/user_id/32" class="<%=  @liked_posters_user_id.include?(32) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">大山</a></div>
+      <div><a href="/posts/user_id/27" class="<%=  @liked_posters_user_id.include?(27) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">横田</a><br><a href="/posts/user_id/42" class="<%= @liked_posters_user_id.include?(42) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">片山</a></div>
+      <div><a href="/posts/user_id/16" class="<%=  @liked_posters_user_id.include?(16) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">山村</a><br><a href="/posts/user_id/22" class="<%=  @liked_posters_user_id.include?(22) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">村越</a></div>
+    </div>
+    </div>
+  <% else %>
+  <div class="gallery-container text-center">
+    <div class="gallery-name">gallery</div>
+    <div class="gallery-space">
+      <div><a href="/posts/user_id/31" class="<%=  @liked_posters_user_id.include?(31) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> w20">Arino</a></div>
+      <div><a href="/posts/user_id/18" class="<%=  @liked_posters_user_id.include?(18) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> w20">Inoue</a></div>
+      <div><a href="/posts/user_id/36" class="<%=  @liked_posters_user_id.include?(36) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> w20">Matsushita</a></div>
+      <div><a href="/posts/user_id/23" class="<%=  @liked_posters_user_id.include?(23) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> w20">Yoneda</a></div>
+    </div>
+  </div>
+  <div class="room-container">
+    <div class="room-space mb-20">
+      <a href="/posts/user_id/30" class="<%=  @liked_posters_user_id.include?(30) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center w20">Yoshida</a>
+      <a href="/posts/user_id/33" class="<%=  @liked_posters_user_id.include?(33) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center w20">Hattori</a>
+      <a href="/posts/user_id/29" class="<%=  @liked_posters_user_id.include?(29) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center w20">Shiga</a>
+      <a href="/posts/user_id/25" class="<%=  @liked_posters_user_id.include?(25) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center w20">Ishikawa</a>
+      <a href="/posts/user_id/37" class="<%=  @liked_posters_user_id.include?(37) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center w20">Saya</a>
+    </div>
+    <div class="room-space mb-20">
+      <a href="/posts/user_id/38" class="<%=  @liked_posters_user_id.include?(38) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center w20">Yonezawa</a>
+      <a href="/posts/user_id/26" class="<%=  @liked_posters_user_id.include?(26) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center w20">Shigeto</a>
+      <a href="/posts/user_id/41" class="<%= @liked_posters_user_id.include?(41) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center w20">Ezuka</a>
+      <a href="/posts/user_id/39" class="<%= @liked_posters_user_id.include?(39) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center w20">Mukaiyama</a>
+      <a href="/posts/user_id/17" class="<%=  @liked_posters_user_id.include?(17) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center w20">Wakamatsu</a>
+    </div>
+
+    <div class="room-space">
+      <a href="/posts/user_id/15" class="<%=  @liked_posters_user_id.include?(15) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center w20">Kawauchi</a>
+      
+      <a href="/posts/user_id/43" class="<%= @liked_posters_user_id.include?(43) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center w20">Ifuku</a>
+      
+      <a href="/posts/user_id/34" class="<%=  @liked_posters_user_id.include?(34) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center w20">Tsuzuki</a>
+      
+      <a href="/posts/user_id/14" class="<%=  @liked_posters_user_id.include?(14) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center w20">Chida</a>
+    </div>
+
+    <div class="room-space">
+    <a href="/posts/user_id/20" class="<%=  @liked_posters_user_id.include?(20) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center w20">Otsuka</a>
+    <a href="/posts/user_id/35" class="<%=  @liked_posters_user_id.include?(35) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center w20">Koike</a>
+    <a href="/posts/user_id/27" class="<%=  @liked_posters_user_id.include?(27) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center w20">Yokota</a>
+    <a href="/posts/user_id/16" class="<%=  @liked_posters_user_id.include?(16) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center w20">Yamamura</a>
+    </div>
+
+    <div class="room-space">
+    <a href="/posts/user_id/40" class="<%= @liked_posters_user_id.include?(40) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center w20">Kubo</a>
+    <a href="/posts/user_id/21" class="<%=  @liked_posters_user_id.include?(21) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center w20">Nishimura</a>
+    <a href="/posts/user_id/24" class="<%=  @liked_posters_user_id.include?(24) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center w20">Nozaki</a>
+    <a href="/posts/user_id/28" class="<%=  @liked_posters_user_id.include?(28) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center w20">Kakuta</a>
+    </div>
+
+    <div class="room-space">
+    <a href="/posts/user_id/19" class="<%=  @liked_posters_user_id.include?(19) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center w20">Nakashima</a>
+    <a href="/posts/user_id/32" class="<%=  @liked_posters_user_id.include?(32) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center w20">Oyama</a>
+    <a href="/posts/user_id/42" class="<%= @liked_posters_user_id.include?(42) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center w20">Katayama</a>
+    <a href="/posts/user_id/22" class="<%=  @liked_posters_user_id.include?(22) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center w20">Murakoshi</a>
+    </div>
+    </div>
+  <% end %>
+<% else %>
+  <div class="gallery-container text-center">
   <div class="gallery-name">ギャラリー</div>
   <div class="gallery-space">
     <div><a href="/posts/user_id/31" class="<%=  @liked_posters_user_id.include?(31) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">有野</a></div>
@@ -9,40 +109,41 @@
     <div><a href="/posts/user_id/23" class="<%=  @liked_posters_user_id.include?(23) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">米田</a></div>
   </div>
   </div>
-<div class="room-container">
-  <div class="room-space">
-    <a href="/posts/user_id/30" class="<%=  @liked_posters_user_id.include?(30) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">吉田</a>
-    <a href="/posts/user_id/33" class="<%=  @liked_posters_user_id.include?(33) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">服部</a>
-    <a href="/posts/user_id/29" class="<%=  @liked_posters_user_id.include?(29) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">志賀</a>
-    <a href="/posts/user_id/25" class="<%=  @liked_posters_user_id.include?(25) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">石川</a>
-    <a href="/posts/user_id/37" class="<%=  @liked_posters_user_id.include?(37) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">道祖</a>
-  </div>
+  <div class="room-container">
+    <div class="room-space">
+      <a href="/posts/user_id/30" class="<%=  @liked_posters_user_id.include?(30) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">吉田</a>
+      <a href="/posts/user_id/33" class="<%=  @liked_posters_user_id.include?(33) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">服部</a>
+      <a href="/posts/user_id/29" class="<%=  @liked_posters_user_id.include?(29) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">志賀</a>
+      <a href="/posts/user_id/25" class="<%=  @liked_posters_user_id.include?(25) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">石川</a>
+      <a href="/posts/user_id/37" class="<%=  @liked_posters_user_id.include?(37) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">道祖</a>
+    </div>
 
-  <div class="room-space">
-    <a href="/posts/user_id/38" class="<%=  @liked_posters_user_id.include?(38) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">米澤</a>
-    <a href="/posts/user_id/26" class="<%=  @liked_posters_user_id.include?(26) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">重東</a>
-    <a href="/posts/user_id/41" class="<%= @liked_posters_user_id.include?(41) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">江塚</a>
-    <a href="/posts/user_id/39" class="<%= @liked_posters_user_id.include?(39) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">向山</a>
-    <a href="/posts/user_id/17" class="<%=  @liked_posters_user_id.include?(17) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">若松</a>
-  </div>
+    <div class="room-space">
+      <a href="/posts/user_id/38" class="<%=  @liked_posters_user_id.include?(38) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">米澤</a>
+      <a href="/posts/user_id/26" class="<%=  @liked_posters_user_id.include?(26) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">重東</a>
+      <a href="/posts/user_id/41" class="<%= @liked_posters_user_id.include?(41) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">江塚</a>
+      <a href="/posts/user_id/39" class="<%= @liked_posters_user_id.include?(39) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">向山</a>
+      <a href="/posts/user_id/17" class="<%=  @liked_posters_user_id.include?(17) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">若松</a>
+    </div>
 
-  <div class="room-space">
-    <div><a href="/posts/user_id/15" class="<%=  @liked_posters_user_id.include?(15) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">河内</a><br><a href="/posts/user_id/40" class="<%= @liked_posters_user_id.include?(40) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">久保</a></div>
-    <div><a href="/posts/user_id/43" class="<%= @liked_posters_user_id.include?(43) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">井福</a><br><a href="/posts/user_id/21" class="<%=  @liked_posters_user_id.include?(21) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">西村</a></div>
-    <div><a href="/posts/user_id/34" class="<%=  @liked_posters_user_id.include?(34) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">都築</a><br><a href="/posts/user_id/24" class="<%=  @liked_posters_user_id.include?(24) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">野崎</a></div>
-    <div><a href="/posts/user_id/14" class="<%=  @liked_posters_user_id.include?(14) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">千田</a><br><a href="/posts/user_id/28" class="<%=  @liked_posters_user_id.include?(28) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">角田</a></div>
+    <div class="room-space">
+      <div><a href="/posts/user_id/15" class="<%=  @liked_posters_user_id.include?(15) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">河内</a><br><a href="/posts/user_id/40" class="<%= @liked_posters_user_id.include?(40) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">久保</a></div>
+      <div><a href="/posts/user_id/43" class="<%= @liked_posters_user_id.include?(43) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">井福</a><br><a href="/posts/user_id/21" class="<%=  @liked_posters_user_id.include?(21) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">西村</a></div>
+      <div><a href="/posts/user_id/34" class="<%=  @liked_posters_user_id.include?(34) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">都築</a><br><a href="/posts/user_id/24" class="<%=  @liked_posters_user_id.include?(24) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">野崎</a></div>
+      <div><a href="/posts/user_id/14" class="<%=  @liked_posters_user_id.include?(14) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">千田</a><br><a href="/posts/user_id/28" class="<%=  @liked_posters_user_id.include?(28) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">角田</a></div>
+    </div>
+    <div class="room-space">
+    <div><a href="/posts/user_id/20" class="<%=  @liked_posters_user_id.include?(20) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">大塚</a><br><a href="/posts/user_id/19" class="<%=  @liked_posters_user_id.include?(19) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">中島</a></div>
+    <div><a href="/posts/user_id/35" class="<%=  @liked_posters_user_id.include?(35) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">小池</a><br><a href="/posts/user_id/32" class="<%=  @liked_posters_user_id.include?(32) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">大山</a></div>
+    <div><a href="/posts/user_id/27" class="<%=  @liked_posters_user_id.include?(27) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">横田</a><br><a href="/posts/user_id/42" class="<%= @liked_posters_user_id.include?(42) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">片山</a></div>
+    <div><a href="/posts/user_id/16" class="<%=  @liked_posters_user_id.include?(16) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">山村</a><br><a href="/posts/user_id/22" class="<%=  @liked_posters_user_id.include?(22) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">村越</a></div>
   </div>
-  <div class="room-space">
-  <div><a href="/posts/user_id/20" class="<%=  @liked_posters_user_id.include?(20) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">大塚</a><br><a href="/posts/user_id/19" class="<%=  @liked_posters_user_id.include?(19) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">中島</a></div>
-  <div><a href="/posts/user_id/35" class="<%=  @liked_posters_user_id.include?(35) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">小池</a><br><a href="/posts/user_id/32" class="<%=  @liked_posters_user_id.include?(32) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">大山</a></div>
-  <div><a href="/posts/user_id/27" class="<%=  @liked_posters_user_id.include?(27) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">横田</a><br><a href="/posts/user_id/42" class="<%= @liked_posters_user_id.include?(42) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">片山</a></div>
-  <div><a href="/posts/user_id/16" class="<%=  @liked_posters_user_id.include?(16) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">山村</a><br><a href="/posts/user_id/22" class="<%=  @liked_posters_user_id.include?(22) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">村越</a></div>
-</div>
-</div>
+  </div>
+<% end %>
 
 <div class="vote-link text-center">
 <% if Time.now > Time.new(2024, 2, 16, 13, 0, 0, "+09:00") %>
-  <a href="https://docs.google.com/spreadsheets/d/1XwOvmd_E_lt5DzlkobgYB6iS52GRcDCtAL_cdxBF7cU/edit?resourcekey#gid=1761582134" class="vote-btn" target="blank">13時を超えると得点表へのリンクを表示</a>
+  <a href="https://docs.google.com/spreadsheets/d/1XwOvmd_E_lt5DzlkobgYB6iS52GRcDCtAL_cdxBF7cU/edit?resourcekey#gid=1761582134" class="vote-btn" target="blank">集計結果</a>
   <% end %>
 </div>
 
