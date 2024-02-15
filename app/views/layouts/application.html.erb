@@ -28,11 +28,11 @@
               <li class="nav-item">
               <% if current_user.email.include?('@design.kyushu-u.ac.jp') %>
               <li class="nav-item">
-              <%= link_to "投票ページへ", user_path(current_user.id) ,class:"text-decoration-none nav-link active" %>
+              <%= link_to "Vote", user_path(current_user.id) ,class:"text-decoration-none nav-link active" %>
               </li>
               <% else %>
               <li class="nav-item">
-              <%= link_to "投票ページへ", user_path(current_user.id) ,class:"text-decoration-none nav-link active" %>
+              <%= link_to "Vote", user_path(current_user.id) ,class:"text-decoration-none nav-link active" %>
               </li>
               <% end %>
               <li class="nav-item">
