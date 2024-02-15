@@ -3,9 +3,7 @@
     <%= @post.title %>
     <% if user_signed_in? %>
       <% if current_user.id == @post.user_id %>
-        <%= link_to  edit_post_path(@post.id) do %>
-          <i class="fa-solid fa-pen-to-square edit_link"></i>
-        <% end %>
+     
       <% end %>
     <% end %>
   </h3>
