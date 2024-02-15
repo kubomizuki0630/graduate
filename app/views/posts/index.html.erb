@@ -11,19 +11,19 @@
   </div>
 <div class="room-container">
   <div class="room-space">
-    <a href="/posts/user_id/30" class="<%=  @liked_posters_user_id.include?(30) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">吉田</a>
-    <a href="/posts/user_id/33" class="<%=  @liked_posters_user_id.include?(33) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">服部</a>
-    <a href="/posts/user_id/29" class="<%=  @liked_posters_user_id.include?(29) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">志賀</a>
-    <a href="/posts/user_id/25" class="<%=  @liked_posters_user_id.include?(25) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">石川</a>
-    <a href="/posts/user_id/37" class="<%=  @liked_posters_user_id.include?(37) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">道祖</a>
+    <a href="/posts/user_id/30" class="<%=  @liked_posters_user_id.include?(30) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">吉田</a>
+    <a href="/posts/user_id/33" class="<%=  @liked_posters_user_id.include?(33) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">服部</a>
+    <a href="/posts/user_id/29" class="<%=  @liked_posters_user_id.include?(29) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">志賀</a>
+    <a href="/posts/user_id/25" class="<%=  @liked_posters_user_id.include?(25) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">石川</a>
+    <a href="/posts/user_id/37" class="<%=  @liked_posters_user_id.include?(37) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">道祖</a>
   </div>
 
   <div class="room-space">
-    <div><a href="/posts/user_id/38" class="<%=  @liked_posters_user_id.include?(38) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">米澤</a></div>
-    <div><a href="/posts/user_id/26" class="<%=  @liked_posters_user_id.include?(26) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">重東</a></div>
-    <div><a href="/posts/user_id/41" class="<%= @liked_posters_user_id.include?(41) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">江塚</a></div>
-    <div><a href="/posts/user_id/39" class="<%= @liked_posters_user_id.include?(39) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">向山</a></div>
-    <div><a href="/posts/user_id/17" class="<%=  @liked_posters_user_id.include?(17) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">若松</a></div>
+    <a href="/posts/user_id/38" class="<%=  @liked_posters_user_id.include?(38) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">米澤</a>
+    <a href="/posts/user_id/26" class="<%=  @liked_posters_user_id.include?(26) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">重東</a>
+    <a href="/posts/user_id/41" class="<%= @liked_posters_user_id.include?(41) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">江塚</a>
+    <a href="/posts/user_id/39" class="<%= @liked_posters_user_id.include?(39) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">向山</a>
+    <a href="/posts/user_id/17" class="<%=  @liked_posters_user_id.include?(17) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">若松</a>
   </div>
 
   <div class="room-space">
@@ -45,10 +45,19 @@
   <a href="https://docs.google.com/spreadsheets/d/1XwOvmd_E_lt5DzlkobgYB6iS52GRcDCtAL_cdxBF7cU/edit?resourcekey#gid=1761582134" class="vote-btn" target="blank">13時を超えると得点表へのリンクを表示</a>
   <% end %>
 </div>
+
 <div class="latestposts display-5 text-center mt-5 mb-5">Works</div>
+
 <% if user_signed_in? %>
-  <div class="text-center mt-5 mb-5">得点候補の作品をいいねしてください。<br>いいねすると<a href="/users/<%= current_user.id %>" class="text-decoration-none">投票ページ</a>で得点をつけられます</div>
+  <% if current_user.email.include?('@design.kyushu-u.ac.jp') %>
+    <div class="text-center mt-5 mb-5">得点候補の作品をいいねしてください。<br>いいねすると<a href="/users/<%= current_user.id %>" class="text-decoration-none">投票ページ</a>で得点をつけられます</div>
+  <% elsif current_user.email.include?('@s.kyushu-u.ac.jp') %>
+    <div class="text-center mt-5 mb-5">得点候補の作品をいいねしてください。<br>いいねすると<a href="/users/<%= current_user.id %>" class="text-decoration-none">投票ページ</a>で得点をつけられます</div>
+  <% else %>
+    <div class="text-center mt-5 mb-5">Please like the score candidate's work.<br>If you like it, you can score on the <a href="/users/<%= current_user.id %>" class="text-decoration-none">voting page</a></div>
+  <% end %>
 <% end %>
+
 <%= form_tag({controller:"/posts",action:"index"}, method: :get ,class:"d-flex search_form_container") do %>
   <%= text_field_tag :search  ,"",class:"form-control me-2 search_width" ,placeholder:"Name,Title" %>
   <%= submit_tag 'search' ,class:"btn btn-outline-success" %>
