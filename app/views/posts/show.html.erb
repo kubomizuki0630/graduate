@@ -28,9 +28,9 @@
   <% end %>
   
   
+  <h3 class="fz-20">Summary (Japanese)</h3>
   <% if @post.content? %>
     <div class="show-body">
-      <h3 class="fz-20">Summary (Japanese)</h3>
       <p><%= text_url_to_link(safe_join((h(@post.content)).split("\n"),tag(:br))).html_safe %></p>
     </div>
   <% end %>
@@ -39,7 +39,7 @@
 
   <% unless @summary.exists? %>
   <div class="comments_item">
-    <span class="text-secondary">コメントがありません</span>
+    <span class="text-secondary">No Summary</span>
   </div>
   <% else %>
   <h3 class="fz-20">Summary (English)</h3>
