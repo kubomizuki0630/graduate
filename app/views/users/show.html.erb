@@ -2,6 +2,7 @@
   <% if user_signed_in? %>
     <% if @user.id == current_user.id %>
       <div class="latestposts display-5 text-center mt-5 mb-5"><%= current_user.name %>’s Favorite</div>
+      <div class="text-center mt-5 mb-5">いいねをすると得点を入力できます。<br>投票したい作品がない場合は、<br><a href="/" class="text-decoration-none">Topページ</a>でいいねしてください。</div>
       <div class="scroll_box">
         <% unless @user.liked_posts.exists?  %>
           <div class="no_favorite">
@@ -76,7 +77,6 @@
             </form>
         <% end %>
       </div>
-      <div class="text-center mt-5 mb-5">いいねをすると得点を入力できます。<br>投票したい作品がない場合は、<br><a href="/" class="text-decoration-none">Topページ</a>でいいねしてください。</div>
       <div class="latestposts display-5 text-center mt-5 mb-5">スコア確認</div>
       <div class="text-center mt-5 mb-5 text-danger">投票者を確認の上、<br>右下の送信ボタンを押してください</div>
       <div class="text-center mt-5 mb-5">
