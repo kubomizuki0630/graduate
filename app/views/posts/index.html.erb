@@ -7,8 +7,8 @@
       <div class="gallery-space">
         <div><a href="/posts/user_id/31" class="<%=  @liked_posters_user_id.include?(31) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">有野</a></div>
         <div><a href="/posts/user_id/18" class="<%=  @liked_posters_user_id.include?(18) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">井上</a></div>
-        <div><a href="/posts/user_id/36" class="<%=  @liked_posters_user_id.include?(36) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">松下</a></div>
         <div><a href="/posts/user_id/23" class="<%=  @liked_posters_user_id.include?(23) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">米田</a></div>
+        <div><a href="/posts/user_id/36" class="<%=  @liked_posters_user_id.include?(36) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %>">松下</a></div>
       </div>
       </div>
     <div class="room-container">
@@ -22,8 +22,8 @@
 
       <div class="room-space">
         <a href="/posts/user_id/38" class="<%=  @liked_posters_user_id.include?(38) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">米澤</a>
-        <a href="/posts/user_id/26" class="<%=  @liked_posters_user_id.include?(26) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">重東</a>
         <a href="/posts/user_id/41" class="<%= @liked_posters_user_id.include?(41) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">江塚</a>
+        <a href="/posts/user_id/26" class="<%=  @liked_posters_user_id.include?(26) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">重東</a>
         <a href="/posts/user_id/39" class="<%= @liked_posters_user_id.include?(39) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">向山</a>
         <a href="/posts/user_id/17" class="<%=  @liked_posters_user_id.include?(17) ? 'text-danger text-decoration-none' : 'text-dark text-decoration-none' %> text-center">若松</a>
       </div>
@@ -219,7 +219,7 @@
 <%= paginate @posts %>
 
   <% if user_signed_in? %>
-    <% unless current_user.email.include?('@design.kyushu-u.ac.jp') %>
+    <% if current_user.email.include?('@s.kyushu-u.ac.jp') %>
       <%= link_to(new_post_path) do %>
         <i class="fa-solid fa-circle-plus fa-4x text-success"></i>
         <% end %>
