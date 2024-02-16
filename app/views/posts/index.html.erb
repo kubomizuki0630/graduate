@@ -153,7 +153,7 @@
   <% if current_user.email.include?('@design.kyushu-u.ac.jp') %>
     <div class="text-center mt-5 mb-5">得点候補の作品をいいねしてください。<br>いいねすると<a href="/users/<%= current_user.id %>" class="text-decoration-none">投票ページ</a>で得点をつけられます</div>
   <% elsif current_user.email.include?('@s.kyushu-u.ac.jp') %>
-    <div class="text-center mt-5 mb-5">得点候補の作品をいいねしてください。<br>いいねすると<a href="/users/<%= current_user.id %>" class="text-decoration-none">投票ページ</a>で得点をつけられます</div>
+    <div class="text-center mt-5 mb-5">得点候補の作品をいいねしてください。<br>いいねすると<a href="/users/<%= current_user.id %>" class="text-decoration-none">投票ページ</a>で得点をつけられます。</div>
   <% else %>
     <div class="text-center mt-5 mb-5">Please like the score candidate's work.<br>If you like it, you can score on the <a href="/users/<%= current_user.id %>" class="text-decoration-none">voting page</a></div>
   <% end %>
